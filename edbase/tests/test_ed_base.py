@@ -42,7 +42,7 @@ class TestEdBase(BaseTest):
         #cls.getFile = cls.dataset.getFile
 
     def test_plugin(self):
-        # Really stupid test to check that tomo plugin is defined
+        # Really stupid test to check that edbase plugin is defined
         edbase = Domain.getPlugin('edbase')
 
         self.assertFalse(edbase is None)
@@ -53,7 +53,8 @@ class TestEdBase(BaseTest):
 
         expected = ['DiffractionImage', 'SetOfDiffractionImages']
         for e in expected:
-            self.assertTrue(e in objects, "%s should be in Domain.getObjects" % e)
+            self.assertTrue(
+                e in objects, "%s should be in Domain.getObjects" % e)
 
     def test_create_diffractionImages(self):
         setFn = self.getOutputPath('diffraction-images.sqlite')
@@ -89,10 +90,12 @@ class TestEdBaseProtocols(BaseTest):
     @classmethod
     def setUpClass(cls):
         setupTestProject(cls)
-        cls.dataPath = os.environ.get('SCIPION_TEST_ED', '/data/work_software/scipion-ed/')
+        testdatapath = '/mnt/e/Programming/testdata/scipion-ed/190409/experiment_1'
+        # testdatapath='/data/work_software/scipion-ed/'
+        cls.dataPath = os.environ.get('SCIPION_TEST_ED', testdatapath)
 
         if not os.path.exists(cls.dataPath):
-            raise Exception("Can not run tomo tests, "
+            raise Exception("Can not run ED tests, "
                             "SCIPION_TEST_ED variable not defined. ")
 
     def _runImportImages(self, filesPattern):

@@ -90,9 +90,8 @@ class TestEdBaseProtocols(BaseTest):
     @classmethod
     def setUpClass(cls):
         setupTestProject(cls)
-        testdatapath = '/mnt/e/Programming/testdata/scipion-ed/190409/experiment_1'
-        # testdatapath='/data/work_software/scipion-ed/'
-        cls.dataPath = os.environ.get('SCIPION_TEST_ED', testdatapath)
+        cls.dataPath = os.environ.get(
+            'SCIPION_TEST_ED', '/data/work_software/scipion-ed/')
 
         if not os.path.exists(cls.dataPath):
             raise Exception("Can not run ED tests, "

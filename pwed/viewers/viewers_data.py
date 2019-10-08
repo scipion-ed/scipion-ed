@@ -25,7 +25,7 @@
 # **************************************************************************
 
 import pyworkflow.viewer as pwviewer
-from edbase.objects import SetOfDiffractionImages
+from pwed.objects import SetOfDiffractionImages
 
 
 class EdDataViewer(pwviewer.Viewer):

@@ -27,21 +27,15 @@
 import os
 import re
 from glob import glob
-from datetime import datetime
-from collections import OrderedDict
 
 import pyworkflow as pw
-import pyworkflow.em as pwem
-import pyworkflow.protocol.params as params
+import pyworkflow.protocol as pwprot
+from pyworkflow.mapper import SqliteDb
 
-from pyworkflow.mapper.sqlite_db import SqliteDb
-
-
-import edbase.convert
-from edbase.objects import DiffractionImage, SetOfDiffractionImages
+from pwed.objects import DiffractionImage, SetOfDiffractionImages
 
 
-class EdBaseProtocol(pwem.EMProtocol):
+class EdBaseProtocol(pwprot.Protocol):
     """ Base class to all EM protocols.
     It will contains some common functionalities.
     """
@@ -64,7 +58,7 @@ class EdBaseProtocol(pwem.EMProtocol):
                                 'diffration-images%s.sqlite', suffix)
 
 
-class ProtImportDiffractionImages(pwem.ProtImport, EdBaseProtocol):
+class ProtImportDiffractionImages(EdBaseProtocol):
     """ Base class for other Import protocols.
     All imports protocols will have:
     1) Several options to import from (_getImportOptions function)
@@ -94,10 +88,10 @@ class ProtImportDiffractionImages(pwem.ProtImport, EdBaseProtocol):
     def _defineParams(self, form):
         form.addSection(label='Import')
 
-        form.addParam('filesPath', params.PathParam,
+        form.addParam('filesPath', pwprot.PathParam,
                       label="Files directory",
                       help="Root directory of the tilt-series (or movies).")
-        form.addParam('filesPattern', params.StringParam,
+        form.addParam('filesPattern', pwprot.StringParam,
                       label='Pattern',
                       help="Pattern of the tilt series\n\n"
                            "The pattern can contain standard wildcards such as\n"
@@ -109,13 +103,13 @@ class ProtImportDiffractionImages(pwem.ProtImport, EdBaseProtocol):
                            "         (an integer value, unique within a tilt-series).\n"
                            "Examples:\n"
                            "")
-        form.addParam('importAction', params.EnumParam,
+        form.addParam('importAction', pwprot.EnumParam,
                       default=self.IMPORT_LINK_REL,
                       choices=['Copy files',
                                'Absolute symlink',
                                'Relative symlink'],
-                      display=params.EnumParam.DISPLAY_HLIST,
-                      expertLevel=params.LEVEL_ADVANCED,
+                      display=pwprot.EnumParam.DISPLAY_HLIST,
+                      expertLevel=pwprot.LEVEL_ADVANCED,
                       label="Import action on files",
                       help="By default ...")
 

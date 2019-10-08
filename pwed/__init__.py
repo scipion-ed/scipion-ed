@@ -1,8 +1,10 @@
 # **************************************************************************
 # *
 # * Authors:     J.M. De la Rosa Trevin (delarosatrevin@scilifelab.se) [1]
+# *              Viktor E. G. Bengtsson (viktor.bengtsson@mmk.su.se)   [2]
 # *
 # * [1] SciLifeLab, Stockholm University
+# * [2] MMK, Stockholm University
 # *
 # * This program is free software; you can redistribute it and/or modify
 # * it under the terms of the GNU General Public License as published by
@@ -23,23 +25,28 @@
 # *  e-mail address 'scipion@cnb.csic.es'
 # *
 # **************************************************************************
+"""
+This modules contains classes related with EM
+"""
 
-import pyworkflow.em
+import pyworkflow.plugin
+from pyworkflow.viewer import Viewer
+from pyworkflow.wizard import Wizard
+from pyworkflow.protocol import Protocol
 
-
-_logo = ""
-_references = []
-
-
-class Plugin(pyworkflow.em.Plugin):
-    @classmethod
-    def _defineVariables(cls):
-        pass
-
-    @classmethod
-    def getEnviron(cls):
-        return None
+from .constants import *
+from .objects import EdBaseObject
 
 
-pyworkflow.em.Domain.registerPlugin(__name__)
+__version__ = '0.0.0'
+
+
+class Domain(pyworkflow.plugin.Domain):
+    _name = __name__
+    _objectClass = EdBaseObject
+    _protocolClass = Protocol
+    _viewerClass = Viewer
+    _wizardClass = Wizard
+    _baseClasses = globals()
+
 

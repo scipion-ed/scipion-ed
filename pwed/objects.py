@@ -2,8 +2,10 @@
 #  **************************************************************************
 # *
 # * Authors:     J.M. De la Rosa Trevin (delarosatrevin@scilifelab.se) [1]
+# *              Viktor E. G. Bengtsson (viktor.bengtsson@mmk.su.se)   [2]
 # *
 # * [1] SciLifeLab, Stockholm University
+# * [2] MMK, Stockholm University
 # *
 # * This program is free software; you can redistribute it and/or modify
 # * it under the terms of the GNU General Public License as published by
@@ -28,21 +30,31 @@
 import os
 
 import pyworkflow.object as pwobj
-import pyworkflow.em as pwem
-
 from .constants import NO_INDEX
 
 
-class Detector(pwem.EMObject):
+class EdBaseObject(pwobj.OrderedObject):
+    """ Simple base class from which all objects in this Domain will 
+    inherit from.
+    """
+    pass
+
+
+class EdBaseSet(pwobj.Set, EdBaseObject):
+    """ Simple base Set class. """
+    pass
+
+
+class Detector(EdBaseObject):
     """ Store basic properties of detectors. """
     def __init__(self, **kwargs):
-        pwem.EMObject.__init__(self, **kwargs)
+        EdBaseObject.__init__(self, **kwargs)
         # Detector type
         self._type = pwobj.String()
         self._serialNumber = pwobj.String()
 
 
-class DiffractionImage(pwem.EMObject):
+class DiffractionImage(EdBaseObject):
     """Represents an EM Image object"""
     def __init__(self, location=None, **kwargs):
         """
@@ -50,7 +62,7 @@ class DiffractionImage(pwem.EMObject):
         :param location: Could be a valid location: (index, filename)
         or  filename
         """
-        pwem.EMObject.__init__(self, **kwargs)
+        EdBaseObject.__init__(self, **kwargs)
         # Image location is composed by an index and a filename
         self._index = pwobj.Integer(0)
         self._filename = pwobj.String()
@@ -102,9 +114,9 @@ class DiffractionImage(pwem.EMObject):
         t = type(first)
         if t == tuple:
             index, filename = first
-        elif t == int or t == long:
+        elif t == int:
             index, filename = first, args[1]
-        elif t == str or t == unicode:
+        elif t == str:
             index, filename = NO_INDEX, first
         else:
             raise Exception('setLocation: unsupported type %s as input.' % t)
@@ -151,7 +163,7 @@ class DiffractionImage(pwem.EMObject):
         return filePaths
 
 
-class SetOfDiffractionImages(pwem.EMSet):
+class SetOfDiffractionImages(EdBaseSet):
     """ Represents a set of Images
 
     HEADER_BYTES=512;
@@ -184,7 +196,7 @@ DENZO_Y_BEAM=12.0835;
     ITEM_TYPE = DiffractionImage
 
     def __init__(self, **kwargs):
-        pwem.EMSet.__init__(self, **kwargs)
+        EdBaseSet.__init__(self, **kwargs)
 
         # Pixel size of the image (in millimeters)
         self._pixelSizeX = pwobj.Float()

@@ -34,6 +34,9 @@ from pwed.objects import DiffractionImage, SetOfDiffractionImages
 from pwed.protocols import ProtImportDiffractionImages
 
 
+pw.Config.setDomain(pwed)
+
+
 class TestEdBase(pwtests.BaseTest):
     @classmethod
     def setUpClass(cls):
@@ -43,7 +46,7 @@ class TestEdBase(pwtests.BaseTest):
         self.assertTrue(hasattr(pwed, 'Domain'))
 
         # Check that defined objects here are found
-        objects = Domain.getObjects()
+        objects = pwed.Domain.getObjects()
 
         expected = ['DiffractionImage', 'SetOfDiffractionImages']
         for e in expected:
@@ -82,8 +85,9 @@ class TestEdBase(pwtests.BaseTest):
 class TestEdBaseProtocols(pwtests.BaseTest):
     @classmethod
     def setUpClass(cls):
-        pwtests.setupTestProject(cls)
-        cls.dataPath = os.environ.get('SCIPION_TEST_ED', '/data/work_software/scipion-ed/')
+        pwtests.setupTestProject(cls, writeLocalConfig=True)
+        cls.dataPath = os.environ.get('SCIPION_TEST_ED',
+                                      '/data/work_software/scipion-ed/')
 
         if not os.path.exists(cls.dataPath):
             raise Exception("Can not run tomo tests, "

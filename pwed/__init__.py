@@ -29,7 +29,7 @@
 This modules contains classes related with EM
 """
 
-import pyworkflow.plugin
+import pyworkflow.plugin as pwplugin
 from pyworkflow.viewer import Viewer
 from pyworkflow.wizard import Wizard
 from pyworkflow.protocol import Protocol
@@ -41,12 +41,19 @@ from .objects import EdBaseObject
 __version__ = '0.0.0'
 
 
-class Domain(pyworkflow.plugin.Domain):
+class Domain(pwplugin.Domain):
     _name = __name__
     _objectClass = EdBaseObject
     _protocolClass = Protocol
     _viewerClass = Viewer
     _wizardClass = Wizard
     _baseClasses = globals()
+
+
+class Plugin(pwplugin.Plugin):
+    pass
+
+
+Domain.registerPlugin(__name__)
 
 

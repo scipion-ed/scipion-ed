@@ -30,6 +30,8 @@
 import os
 
 import pyworkflow.object as pwobj
+
+import pwed
 from .constants import NO_INDEX
 
 
@@ -42,7 +44,8 @@ class EdBaseObject(pwobj.OrderedObject):
 
 class EdBaseSet(pwobj.Set, EdBaseObject):
     """ Simple base Set class. """
-    pass
+    def _loadClassesDict(self):
+        return pwed.Domain.getMapperDict()
 
 
 class Detector(EdBaseObject):

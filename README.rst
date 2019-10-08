@@ -1,12 +1,13 @@
 
 scipion-ed (module pwed)
-===========
+========================
 
 **scipion-ed** is the base plugin defining the Domain for Electron Diffraction image processing.
 
 
 Development
 -------------
+
 Before installing **scipion-ed**, we need **scipion-pyworkflow**, so during
 development one can do:
 

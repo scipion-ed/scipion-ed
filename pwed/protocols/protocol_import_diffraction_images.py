@@ -30,32 +30,9 @@ from glob import glob
 
 import pyworkflow as pw
 import pyworkflow.protocol as pwprot
-from pyworkflow.mapper import SqliteDb
 
 from pwed.objects import DiffractionImage, SetOfDiffractionImages
-
-
-class EdBaseProtocol(pwprot.Protocol):
-    """ Base class to all EM protocols.
-    It will contains some common functionalities.
-    """
-    _base = True
-
-    def __createSet(self, SetClass, template, suffix, **kwargs):
-        """ Create a set and set the filename using the suffix.
-        If the file exists, it will be delete. """
-        setFn = self._getPath(template % suffix)
-        # Close the connection to the database if
-        # it is open before deleting the file
-        pw.utils.cleanPath(setFn)
-
-        SqliteDb.closeConnection(setFn)
-        setObj = SetClass(filename=setFn, **kwargs)
-        return setObj
-
-    def _createSetOfDiffractionImages(self, suffix=''):
-        return self.__createSet(SetOfDiffractionImages,
-                                'diffration-images%s.sqlite', suffix)
+from .protocol_base import EdBaseProtocol
 
 
 class ProtImportDiffractionImages(EdBaseProtocol):

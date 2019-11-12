@@ -90,6 +90,12 @@ class ProtImportDiffractionImages(EdBaseProtocol):
                       label="Import action on files",
                       help="By default ...")
 
+        form.addParam('skipImages', pwprot.IntParam,
+                      label="Skip images",
+                      help="Images to skip during processing.\n"
+                      "Required for data collected with defocusing to track images back to the aperture or beam.\n"
+                      "A value of 10 will skip every 10th frame.")
+
     # -------------------------- INSERT functions ------------------------------
     def _insertAllSteps(self):
         self.loadPatterns()
@@ -170,5 +176,3 @@ class ProtImportDiffractionImages(EdBaseProtocol):
             return pw.utils.copyFile
         else:
             return pw.utils.createAbsLink
-
-

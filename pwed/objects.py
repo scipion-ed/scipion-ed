@@ -247,7 +247,7 @@ DENZO_Y_BEAM=12.0835;
         self._detector = detector
 
     def getWavelength(self):
-        return self._wavelength
+        return self._wavelength.get()
 
     def copyInfo(self, other):
         """ Copy basic information (sampling rate and ctf)

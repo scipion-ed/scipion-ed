@@ -116,7 +116,6 @@ class ProtImportDiffractionImages(EdBaseProtocol):
         dImg.setOscillation(-33.90, 0.3512)
 
         for f, ts, ti in self.getMatchingFiles():
-            print(f"Found {ti} {f}")
             dImg.setFileName(f)
             dImg.setObjId(int(ti))
             outputSet.append(dImg)

@@ -133,6 +133,13 @@ class DiffractionImage(EdBaseObject):
     def getBaseName(self):
         return os.path.basename(self.getFileName())
 
+    def getDirName(self):
+        return os.path.dirname(self.getFileName())
+
+    def getExtension(self):
+        _, extension = os.path.splitext(self.getBaseName())
+        return extension
+
     def getDistance(self):
         """ Return distance to the detector (in mm). """
         return self._distance.get()

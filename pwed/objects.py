@@ -44,12 +44,14 @@ class EdBaseObject(pwobj.OrderedObject):
 
 class EdBaseSet(pwobj.Set, EdBaseObject):
     """ Simple base Set class. """
+
     def _loadClassesDict(self):
         return pwed.Domain.getMapperDict()
 
 
 class Detector(EdBaseObject):
     """ Store basic properties of detectors. """
+
     def __init__(self, **kwargs):
         EdBaseObject.__init__(self, **kwargs)
         # Detector type
@@ -59,6 +61,7 @@ class Detector(EdBaseObject):
 
 class DiffractionImage(EdBaseObject):
     """Represents an EM Image object"""
+
     def __init__(self, location=None, **kwargs):
         """
          Params:
@@ -243,6 +246,9 @@ DENZO_Y_BEAM=12.0835;
     def setDetector(self, detector):
         self._detector = detector
 
+    def getWavelength(self):
+        return self._wavelength
+
     def copyInfo(self, other):
         """ Copy basic information (sampling rate and ctf)
         from other set of images to current one"""
@@ -258,4 +264,3 @@ DENZO_Y_BEAM=12.0835;
         for row in uniqueFiles:
             filePaths.add(row['_filename'])
         return filePaths
-

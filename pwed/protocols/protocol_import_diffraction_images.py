@@ -90,11 +90,12 @@ class ProtImportDiffractionImages(EdBaseProtocol):
                       label="Import action on files",
                       help="By default ...")
 
-        form.addParam('skipImages', pwprot.IntParam,
+        form.addParam('skipImages', pwprot.IntParam, default=0,
                       label="Skip images",
                       help="Images to skip during processing.\n"
-                      "Required for data collected with defocusing to track images back to the aperture or beam.\n"
-                      "A value of 10 will skip every 10th frame.")
+                           "Required for data collected with defocusing to "
+                           "track images back to the aperture or beam.\n"
+                           "A value of 10 will skip every 10th frame.")
 
     # -------------------------- INSERT functions ------------------------------
     def _insertAllSteps(self):
@@ -117,8 +118,10 @@ class ProtImportDiffractionImages(EdBaseProtocol):
         for f, ts, ti in self.getMatchingFiles():
             print(f"Found {ti} {f}")
             dImg.setFileName(f)
-            dImg.setObjId(ti)
+            dImg.setObjId(int(ti))
             outputSet.append(dImg)
+
+        outputSet.write()
 
         self._defineOutputs(outputDiffractionImages=outputSet)
 

@@ -36,7 +36,7 @@ from .constants import NO_INDEX
 
 
 class EdBaseObject(pwobj.OrderedObject):
-    """ Simple base class from which all objects in this Domain will 
+    """ Simple base class from which all objects in this Domain will
     inherit from.
     """
     pass
@@ -83,6 +83,29 @@ class DiffractionImage(EdBaseObject):
         # Beam center (in pixels)
         self._beamCenterX = pwobj.Float()
         self._beamCenterY = pwobj.Float()
+
+        # Exposure time (in seconds)
+        self._exposureTime = pwobj.Float()
+
+        # TwoTheta
+        self._twoTheta = pwobj.Float()
+
+        # Pixel size of the image (in millimeters)
+        self._pixelSizeX = pwobj.Float()
+        self._pixelSizeY = pwobj.Float()
+
+        # Dimensions of images in this set (number of pixels)
+        self._dimX = pwobj.Integer()
+        self._dimY = pwobj.Integer()
+
+        # Wavelength
+        self._wavelength = pwobj.Float()
+
+        # Detector type
+        self._detector = Detector()
+
+        # Experiment time
+        self._collectionTime = pwobj.String()
 
         if location:
             self.setLocation(location)
@@ -175,6 +198,58 @@ class DiffractionImage(EdBaseObject):
         filePaths.add(self.getFileName())
         return filePaths
 
+    def getExposureTime(self):
+        return self._exposureTime.get()
+
+    def setExposureTime(self, value):
+        self._exposureTime.set(value)
+
+    def getTwoTheta(self):
+        return self._twoTheta.get()
+
+    def setTwoTheta(self, value):
+        self._twoTheta.set(value)
+
+    def getPixelSize(self):
+        """ Return the pixel size, assuming it is the same
+        in both X and Y.
+        """
+        return self._pixelSizeX.get()
+
+    def setPixelSize(self, value):
+        """
+        Set pixel size for both X and Y
+        :param value: new pixel size value
+        :return:
+        """
+        self._pixelSizeX.set(value)
+        self._pixelSizeY.set(value)
+
+    def getDim(self):
+        return self._dimX.get()
+
+    def setDim(self, value):
+        self._dimX.set(value)
+        self._dimY.set(value)
+
+    def getDetector(self):
+        return self._acquisition.get()
+
+    def setDetector(self, detector):
+        self._detector = detector
+
+    def getWavelength(self):
+        return self._wavelength.get()
+
+    def setWavelength(self, value):
+        self._wavelength.set(value)
+
+    def getCollectionTime(self):
+        return self._collectionTime.get()
+
+    def setCollectionTime(self, value):
+        self._collectionTime.set(value)
+
 
 class SetOfDiffractionImages(EdBaseSet):
     """ Represents a set of Images
@@ -210,51 +285,6 @@ DENZO_Y_BEAM=12.0835;
 
     def __init__(self, **kwargs):
         EdBaseSet.__init__(self, **kwargs)
-
-        # Pixel size of the image (in millimeters)
-        self._pixelSizeX = pwobj.Float()
-        self._pixelSizeY = pwobj.Float()
-
-        # Dimensions of images in this set (number of pixels)
-        self._dimX = pwobj.Integer()
-        self._dimY = pwobj.Integer()
-
-        # Wavelength
-        self._wavelength = pwobj.Float()
-
-        # Detector type
-        self._detector = Detector()
-
-    def getPixelSize(self):
-        """ Return the pixel size, assuming it is the same
-        in both X and Y.
-        """
-        return self._pixelSizeX.get()
-
-    def setPixelSize(self, value):
-        """
-        Set pixel size for both X and Y
-        :param value: new pixel size value
-        :return:
-        """
-        self._pixelSizeX.set(value)
-        self._pixelSizeY.set(value)
-
-    def getDim(self):
-        return self._dimX.get()
-
-    def setDim(self, value):
-        self._dimX.set(value)
-        self._dimY.set(value)
-
-    def getDetector(self):
-        return self._acquisition
-
-    def setDetector(self, detector):
-        self._detector = detector
-
-    def getWavelength(self):
-        return self._wavelength.get()
 
     def copyInfo(self, other):
         """ Copy basic information (sampling rate and ctf)

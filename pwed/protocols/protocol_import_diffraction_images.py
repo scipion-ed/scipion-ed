@@ -110,14 +110,30 @@ class ProtImportDiffractionImages(EdBaseProtocol):
 
         outputSet = self._createSetOfDiffractionImages()
 
+        # f, _, _ = self.getMatchingFiles()[0]
+        # h = self.readSmvHeader(f)
+
         dImg = DiffractionImage()
-        # TODO: Parse info from the metadata
-        dImg.setDistance(1000)
-        dImg.setOscillation(-33.90, 0.3512)
 
         for f, ts, ti in self.getMatchingFiles():
             dImg.setFileName(f)
             dImg.setObjId(int(ti))
+            try:
+                if f.endswith('.img'):
+                    h = self.readSmvHeader(f)
+                    dImg.setPixelSize(float(h.get('PIXEL_SIZE')))
+                    dImg.setDim(int(h.get('SIZE1')))
+                    dImg.setWavelength(float(h.get('WAVELENGTH')))
+                    dImg.setDistance(float(h.get('DISTANCE')))
+                    dImg.setOscillation(float(h.get('OSC_START')),
+                                        float(h.get('OSC_RANGE')))
+                    dImg.setBeamCenter(float(h.get('BEAM_CENTER_X')),
+                                       float(h.get('BEAM_CENTER_Y')))
+                    dImg.setExposureTime(float(h.get('TIME')))
+                    dImg.setTwoTheta(float(h.get('TWOTHETA')))
+            except Exception as e:
+                print(e)
+
             outputSet.append(dImg)
 
         outputSet.write()
@@ -179,3 +195,32 @@ class ProtImportDiffractionImages(EdBaseProtocol):
             return pw.utils.copyFile
         else:
             return pw.utils.createAbsLink
+
+    def readSmvHeader(self, image_file):
+        # Reimplemented from get_smv_header in
+        # https://github.com/dials/dxtbx/blob/master/format/FormatSMV.py
+        with open(image_file, "rb") as fh:
+            header_info = fh.read(45).decode("ascii", "ignore")
+            header_size = int(
+                header_info.split("\n")[1].split(
+                    "=")[1].replace(";", "").strip()
+            )
+            header_text = fh.read(header_size).decode("ascii", "ignore")
+        header_dictionary = {}
+
+        # Check that we have the whole header, contained within { }.  Stop
+        # extracting data once a record solely composed of a closing curly
+        # brace is seen.  If there is no such character in header_text
+        # either HEADER_BYTES caused a short read of the header or the
+        # header is malformed.
+        for record in header_text.split("\n"):
+            if record == "}":
+                break
+            if "=" not in record:
+                continue
+
+            key, value = record.replace(";", "").split("=")
+
+            header_dictionary[key.strip()] = value.strip()
+
+        return header_dictionary

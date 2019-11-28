@@ -167,7 +167,7 @@ class ProtImportDiffractionImages(EdBaseProtocol):
             return p
 
         self._regexPattern = _replace(self._pattern.replace('*', '(.*)'),
-                                      '(?P<TS>.*)', '(?P<TI>\d+)')
+                                      '(?P<TS>.*)', r'(?P<TI>\d+)')
         self._regex = re.compile(self._regexPattern)
         self._globPattern = _replace(self._pattern, '*', '*')
 

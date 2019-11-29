@@ -180,8 +180,7 @@ class ProtImportDiffractionImages(EdBaseProtocol):
         for f, ts, ti in self.getMatchingFiles():
             dImg.setFileName(f)
             dImg.setObjId(int(ti))
-            if int(ti) % self.skipImages == 0:
-                dImg.setIgnore(True)
+
             try:
                 if f.endswith('.img'):
                     h = self.readSmvHeader(f)

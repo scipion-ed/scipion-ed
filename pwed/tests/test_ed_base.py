@@ -42,6 +42,35 @@ class TestEdBase(pwtests.BaseTest):
     def setUpClass(cls):
         pwtests.setupTestOutput(cls)
 
+    def mockHeader(self):
+        header_dict = {"HEADER_BYTES": "512",
+                       "DIM": "2",
+                       "BYTE_ORDER": "little_endian",
+                       "TYPE": "unsigned_short",
+                       "SIZE1": "516",
+                       "SIZE2": "516",
+                       "PIXEL_SIZE": "0.055",
+                       "BIN": "1x1",
+                       "BIN_TYPE": "HW",
+                       "ADC": "fast",
+                       "CREV": "1",
+                       "BEAMLINE": "TimePix_SU",
+                       "DETECTOR_SN": "901",
+                       "DATE": "2019-05-03 12:10:21.302198",
+                       "TIME": "0.3",
+                       "DISTANCE": "532.2773",
+                       "TWOTHETA": "0.0",
+                       "PHI": "-33.9000",
+                       "OSC_START": "-33.9000",
+                       "OSC_RANGE": "0.3512",
+                       "WAVELENGTH": "0.0251",
+                       "BEAM_CENTER_X": "219.7000",
+                       "BEAM_CENTER_Y": "226.6500",
+                       "DENZO_X_BEAM": "12.4657",
+                       "DENZO_Y_BEAM": "12.0835",
+                       }
+        return header_dict
+
     def test_plugin(self):
         self.assertTrue(hasattr(pwed, 'Domain'))
 
@@ -61,15 +90,24 @@ class TestEdBase(pwtests.BaseTest):
         testSet = SetOfDiffractionImages(filename=setFn)
 
         dImg = DiffractionImage()
-        dImg.setDistance(1000)
-        dImg.setOscillation(-33.90, 0.3512)
         pattern = '/data/experiment01/images/img%04d.img'
         N = 100
+        h = self.mockHeader()
 
         for i in range(1, N+1):
             dImg.setFileName(pattern % i)
-            dImg.setBeamCenter(i*100, i*200)
             dImg.setObjId(i)
+
+            dImg.setPixelSize(float(h.get('PIXEL_SIZE')))
+            dImg.setDim(int(h.get('SIZE1')))
+            dImg.setWavelength(float(h.get('WAVELENGTH')))
+            dImg.setDistance(float(h.get('DISTANCE')))
+            dImg.setOscillation(float(h.get('OSC_START')),
+                                float(h.get('OSC_RANGE')))
+            dImg.setBeamCenter(float(h.get('BEAM_CENTER_X')),
+                               float(h.get('BEAM_CENTER_Y')))
+            dImg.setExposureTime(float(h.get('TIME')))
+            dImg.setTwoTheta(float(h.get('TWOTHETA')))
             testSet.append(dImg)
 
         testSet.write()
@@ -78,7 +116,14 @@ class TestEdBase(pwtests.BaseTest):
         testSet2 = SetOfDiffractionImages(filename=setFn)
         self.assertEqual(testSet2.getSize(), N)
         for dImg2 in testSet2:
-            self.assertEqual(dImg2.getDistance(), 1000)
+            self.assertEqual(dImg2.getPixelSize(), 0.055)
+            self.assertEqual(dImg2.getDim(), 516)
+            self.assertEqual(dImg2.getWavelength(), 0.0251)
+            self.assertEqual(dImg2.getDistance(), 532.2773)
+            self.assertEqual(dImg2.getOscillation(), (-33.9000, 0.3512))
+            self.assertEqual(dImg2.getBeamCenter(), (219.7000, 226.6500))
+            self.assertEqual(dImg2.getExposureTime(), 0.3)
+            self.assertEqual(dImg2.getTwoTheta(), 0.0)
 
         testSet2.close()
 

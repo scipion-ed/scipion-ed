@@ -50,7 +50,8 @@ class TestEdBase(pwtests.BaseTest):
 
         expected = ['DiffractionImage', 'SetOfDiffractionImages']
         for e in expected:
-            self.assertTrue(e in objects, "%s should be in Domain.getObjects" % e)
+            self.assertTrue(
+                e in objects, "%s should be in Domain.getObjects" % e)
 
     def test_create_diffractionImages(self):
         setFn = self.getOutputPath('diffraction-images.sqlite')
@@ -90,7 +91,7 @@ class TestEdBaseProtocols(pwtests.BaseTest):
                                       '/data/work_software/scipion-ed/')
 
         if not os.path.exists(cls.dataPath):
-            raise Exception("Can not run tomo tests, "
+            raise Exception("Can not run ED tests, "
                             "SCIPION_TEST_ED variable not defined. ")
 
     def _runImportImages(self, filesPattern):
@@ -109,4 +110,3 @@ class TestEdBaseProtocols(pwtests.BaseTest):
         protImport2 = self._runImportImages('{TS}/SMV/data/{TI}.img')
         output = getattr(protImport2, 'outputDiffractionImages', None)
         self.assertFalse(output is None)
-

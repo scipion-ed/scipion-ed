@@ -97,6 +97,68 @@ class ProtImportDiffractionImages(EdBaseProtocol):
                            "track images back to the aperture or beam.\n"
                            "A value of 10 will skip every 10th frame.")
 
+        form.addSection(label='Overwrite header file')
+
+        form.addParam('overwriteWavelength', pwprot.StringParam,
+                      default=None,
+                      allowsNull=True,
+                      label="Set wavelength",
+                      help="Overwrites the wavelength found from the headerfile.")
+
+        form.addParam('overwriteSize1', pwprot.StringParam,
+                      default=None,
+                      allowsNull=True,
+                      label="Set Size1",
+                      help="Overwrites the Size1 found from the headerfile.")
+
+        form.addParam('overwriteSize2', pwprot.StringParam,
+                      default=None,
+                      allowsNull=True,
+                      label="Set Size2",
+                      help="Overwrites the Size2 found from the headerfile.")
+
+        form.addParam('overwritePixelSize', pwprot.StringParam,
+                      default=None,
+                      allowsNull=True,
+                      label="Set pixel size",
+                      help="Overwrites the pixel size found from the headerfile.")
+
+        form.addParam('overwriteExposureTime', pwprot.StringParam,
+                      default=None,
+                      allowsNull=True,
+                      label="Set exposure time",
+                      help="Overwrites the exposure time found from the headerfile.")
+
+        form.addParam('overwriteDetectorDistance', pwprot.StringParam,
+                      default=None,
+                      allowsNull=True,
+                      label="Set detector distance",
+                      help="Overwrites the detector distance found from the headerfile.")
+
+        form.addParam('overwriteOscStart', pwprot.StringParam,
+                      default=None,
+                      allowsNull=True,
+                      label="Set starting angle",
+                      help="Overwrites the starting angle found from the headerfile.")
+
+        form.addParam('overwriteOscRange', pwprot.StringParam,
+                      default=None,
+                      allowsNull=True,
+                      label="Set oscillation range",
+                      help="Overwrites the oscillation range found from the headerfile.")
+
+        form.addParam('overwriteBeamCenterX', pwprot.StringParam,
+                      default=None,
+                      allowsNull=True,
+                      label="Set beam center X",
+                      help="Overwrites the beam center X found from the headerfile.")
+
+        form.addParam('overwriteBeamCenterY', pwprot.StringParam,
+                      default=None,
+                      allowsNull=True,
+                      label="Set beam center Y",
+                      help="Overwrites the beam center Y found from the headerfile.")
+
     # -------------------------- INSERT functions ------------------------------
     def _insertAllSteps(self):
         self.loadPatterns()
@@ -118,6 +180,8 @@ class ProtImportDiffractionImages(EdBaseProtocol):
         for f, ts, ti in self.getMatchingFiles():
             dImg.setFileName(f)
             dImg.setObjId(int(ti))
+            if int(ti) % self.skipImages == 0:
+                dImg.setIgnore(True)
             try:
                 if f.endswith('.img'):
                     h = self.readSmvHeader(f)
@@ -213,6 +277,9 @@ class ProtImportDiffractionImages(EdBaseProtocol):
         # brace is seen.  If there is no such character in header_text
         # either HEADER_BYTES caused a short read of the header or the
         # header is malformed.
+
+        overwrites = self._overwriteParams()
+
         for record in header_text.split("\n"):
             if record == "}":
                 break
@@ -222,5 +289,40 @@ class ProtImportDiffractionImages(EdBaseProtocol):
             key, value = record.replace(";", "").split("=")
 
             header_dictionary[key.strip()] = value.strip()
+            header_dictionary.update(overwrites)
 
         return header_dictionary
+
+    def _overwriteParams(self):
+        new_params = {}
+        if self.overwriteSize1:
+            new_params['SIZE1'] = self.overwriteSize1
+
+        if self.overwriteSize2:
+            new_params['SIZE2'] = self.overwriteSize2
+
+        if self.overwritePixelSize:
+            new_params['PIXEL_SIZE'] = self.overwritePixelSize
+
+        if self.overwriteExposureTime:
+            new_params['TIME'] = self.overwriteExposureTime
+
+        if self.overwriteDetectorDistance:
+            new_params['DISTANCE'] = self.overwriteDetectorDistance
+
+        if self.overwriteOscStart:
+            new_params['OSC_START'] = self.overwriteOscStart
+
+        if self.overwriteOscRange:
+            new_params['OSC_RANGE'] = self.overwriteOscRange
+
+        if self.overwriteWavelength:
+            new_params['WAVELENGTH'] = self.overwriteWavelength
+
+        if self.overwriteBeamCenterX:
+            new_params['BEAM_CENTER_X'] = self.overwriteBeamCenterX
+
+        if self.overwriteBeamCenterY:
+            new_params['BEAM_CENTER_Y'] = self.overwriteBeamCenterY
+
+        return new_params

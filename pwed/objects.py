@@ -107,6 +107,9 @@ class DiffractionImage(EdBaseObject):
         # Experiment time
         self._collectionTime = pwobj.String()
 
+        # Add parameter to state if the image should be ignored in processing
+        self._ignore = pwobj.String()
+
         if location:
             self.setLocation(location)
 
@@ -249,6 +252,12 @@ class DiffractionImage(EdBaseObject):
 
     def setCollectionTime(self, value):
         self._collectionTime.set(value)
+
+    def setIgnore(self, true_or_false=False):
+        if true_or_false is True:
+            self._ignore.set('True')
+        else:
+            self._ignore.set('False')
 
 
 class SetOfDiffractionImages(EdBaseSet):

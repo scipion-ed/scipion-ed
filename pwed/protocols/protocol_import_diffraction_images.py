@@ -294,34 +294,34 @@ class ProtImportDiffractionImages(EdBaseProtocol):
 
     def _overwriteParams(self):
         new_params = {}
-        if self.overwriteSize1:
-            new_params['SIZE1'] = self.overwriteSize1
+        if self.overwriteSize1.get():
+            new_params['SIZE1'] = self.overwriteSize1.get()
 
-        if self.overwriteSize2:
-            new_params['SIZE2'] = self.overwriteSize2
+        if self.overwriteSize2.get():
+            new_params['SIZE2'] = self.overwriteSize2.get()
 
-        if self.overwritePixelSize:
-            new_params['PIXEL_SIZE'] = self.overwritePixelSize
+        if self.overwritePixelSize.get():
+            new_params['PIXEL_SIZE'] = self.overwritePixelSize.get()
 
-        if self.overwriteExposureTime:
-            new_params['TIME'] = self.overwriteExposureTime
+        if self.overwriteExposureTime.get():
+            new_params['TIME'] = self.overwriteExposureTime.get()
 
-        if self.overwriteDetectorDistance:
-            new_params['DISTANCE'] = self.overwriteDetectorDistance
+        if self.overwriteDetectorDistance.get():
+            new_params['DISTANCE'] = self.overwriteDetectorDistance.get()
 
-        if self.overwriteOscStart:
-            new_params['OSC_START'] = self.overwriteOscStart
+        if self.overwriteOscStart.get():
+            new_params['OSC_START'] = self.overwriteOscStart.get()
 
-        if self.overwriteOscRange:
-            new_params['OSC_RANGE'] = self.overwriteOscRange
+        if self.overwriteOscRange.get():
+            new_params['OSC_RANGE'] = self.overwriteOscRange.get()
 
-        if self.overwriteWavelength:
-            new_params['WAVELENGTH'] = self.overwriteWavelength
+        if self.overwriteWavelength.get():
+            new_params['WAVELENGTH'] = self.overwriteWavelength.get()
 
-        if self.overwriteBeamCenterX:
-            new_params['BEAM_CENTER_X'] = self.overwriteBeamCenterX
+        if self.overwriteBeamCenterX.get():
+            new_params['BEAM_CENTER_X'] = self.overwriteBeamCenterX.get()
 
-        if self.overwriteBeamCenterY:
-            new_params['BEAM_CENTER_Y'] = self.overwriteBeamCenterY
+        if self.overwriteBeamCenterY.get():
+            new_params['BEAM_CENTER_Y'] = self.overwriteBeamCenterY.get()
 
         return new_params

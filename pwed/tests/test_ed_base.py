@@ -139,13 +139,28 @@ class TestEdBaseProtocols(pwtests.BaseTest):
             raise Exception("Can not run ED tests, "
                             "SCIPION_TEST_ED variable not defined. ")
 
-    def _runImportImages(self, filesPattern):
+    def _runImportImages(self, filesPattern, **kwargs):
         protImport = self.newProtocol(
             ProtImportDiffractionImages,
             filesPath=os.path.join(self.dataPath),
-            filesPattern=filesPattern)
+            filesPattern=filesPattern,
+            **kwargs)
         self.launchProtocol(protImport)
         return protImport
+
+    def mockOverwrite(self):
+        owDict = {}
+        owDict["overwriteWavelength"] = "1000"
+        owDict["overwriteSize1"] = "1000"
+        owDict["overwriteSize2"] = "1000"
+        owDict["overwritePixelSize"] = "1000"
+        owDict["overwriteExposureTime"] = "1000"
+        owDict["overwriteDetectorDistance"] = "1000"
+        owDict["overwriteOscStart"] = "1000"
+        owDict["overwriteOscRange"] = "1000"
+        owDict["overwriteBeamCenterX"] = "1000"
+        owDict["overwriteBeamCenterY"] = "1000"
+        return owDict
 
     def test_import(self):
         protImport = self._runImportImages('{TS}/RED/{TI}.mrc')
@@ -166,3 +181,17 @@ class TestEdBaseProtocols(pwtests.BaseTest):
             self.assertFalse(img.getBeamCenter() is None)
             self.assertFalse(img.getExposureTime() is None)
             self.assertFalse(img.getTwoTheta() is None)
+
+        overwriteDict = self.mockOverwrite()
+        owImport = self._runImportImages(
+            '{TS}/SMV/data/{TI}.img', **overwriteDict)
+        output = getattr(owImport, 'outputDiffractionImages', None)
+        self.assertFalse(output is None)
+        for img in output:
+            self.assertEqual(img.getPixelSize(), 1000)
+            self.assertEqual(img.getDim(), 1000)
+            self.assertEqual(img.getWavelength(), 1000)
+            self.assertEqual(img.getDistance(), 1000)
+            self.assertEqual(img.getOscillation(), (1000, 1000))
+            self.assertEqual(img.getBeamCenter(), (1000, 1000))
+            self.assertEqual(img.getExposureTime(), 1000)

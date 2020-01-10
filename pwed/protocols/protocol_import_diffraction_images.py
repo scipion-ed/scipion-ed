@@ -90,12 +90,17 @@ class ProtImportDiffractionImages(EdBaseProtocol):
                       label="Import action on files",
                       help="By default ...")
 
-        form.addParam('skipImages', pwprot.IntParam, default=0,
+        form.addParam('skipImages', pwprot.IntParam, default=None,
+                      allowsNull=True,
                       label="Skip images",
                       help="Images to skip during processing.\n"
                            "Required for data collected with defocusing to "
                            "track images back to the aperture or beam.\n"
                            "A value of 10 will skip every 10th frame.")
+        
+        form.addParam('rotationAxis',pwprot.StringParam, default='0.7825634081905295,-0.6225708892658111,0.0',
+                      label="Rotation axis",
+                      help="The goniometer rotation axis relative to the image.")
 
         form.addSection(label='Overwrite header file')
 
@@ -174,12 +179,17 @@ class ProtImportDiffractionImages(EdBaseProtocol):
 
         # f, _, _ = self.getMatchingFiles()[0]
         # h = self.readSmvHeader(f)
+        rotAxis = [float(s) for s in self.rotationAxis.get().split(",")]
 
         dImg = DiffractionImage()
 
         for f, ts, ti in self.getMatchingFiles():
             dImg.setFileName(f)
             dImg.setObjId(int(ti))
+            if self.skipImages.get() is not None:
+                if int(ti) % self.skipImages.get() == 0:
+                    dImg.setIgnore(true_or_false=True)
+            dImg.setRotationAxis(rotAxis)
 
             try:
                 if f.endswith('.img'):

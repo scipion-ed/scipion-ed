@@ -117,7 +117,7 @@ class TestEdBase(pwtests.BaseTest):
         self.assertEqual(testSet2.getSize(), N)
         for dImg2 in testSet2:
             self.assertEqual(dImg2.getPixelSize(), 0.055)
-            self.assertEqual(dImg2.getDim(), 516)
+            self.assertEqual(dImg2.getDim(), (516,516))
             self.assertEqual(dImg2.getWavelength(), 0.0251)
             self.assertEqual(dImg2.getDistance(), 532.2773)
             self.assertEqual(dImg2.getOscillation(), (-33.9000, 0.3512))
@@ -189,9 +189,18 @@ class TestEdBaseProtocols(pwtests.BaseTest):
         self.assertFalse(output is None)
         for img in output:
             self.assertEqual(img.getPixelSize(), 1000)
-            self.assertEqual(img.getDim(), 1000)
+            self.assertEqual(img.getDim(), (1000,1000))
             self.assertEqual(img.getWavelength(), 1000)
             self.assertEqual(img.getDistance(), 1000)
             self.assertEqual(img.getOscillation(), (1000, 1000))
             self.assertEqual(img.getBeamCenter(), (1000, 1000))
             self.assertEqual(img.getExposureTime(), 1000)
+        
+        protImport3 = self._runImportImages('{TS}/SMV/data/{TI}.img',skipImages=10,rotationAxis='1000,1000,0')
+        output = getattr(protImport3, 'outputDiffractionImages', None)
+        self.assertFalse(output is None)
+        for img in output:
+            self.assertNotEqual(img.getObjId(),0)
+            if img.getObjId() % 10 == 0:
+                self.assertTrue(img.getIgnore())
+            self.assertEqual(img.getRotationAxis(),(1000.0,1000.0,0.0))

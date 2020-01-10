@@ -283,33 +283,6 @@ class DiffractionImage(EdBaseObject):
 
 class SetOfDiffractionImages(EdBaseSet):
     """ Represents a set of Images
-
-    HEADER_BYTES=512;
-DIM=2;
-BYTE_ORDER=little_endian;
-TYPE=unsigned_short;
-SIZE1=516;
-SIZE2=516;
-PIXEL_SIZE=0.055;
-BIN=1x1;
-BIN_TYPE=HW;
-ADC=fast;
-CREV=1;
-BEAMLINE=TimePix_SU;
-DETECTOR_SN=901;
-DATE=2019-05-03 12:10:21.302198;
-TIME=0.3;
-DISTANCE=532.2773;
-TWOTHETA=0.0;
-PHI=-33.9000;
-OSC_START=-33.9000;
-OSC_RANGE=0.3512;
-WAVELENGTH=0.0251;
-BEAM_CENTER_X=219.7000;
-BEAM_CENTER_Y=226.6500;
-DENZO_X_BEAM=12.4657;
-DENZO_Y_BEAM=12.0835;
-
     """
     ITEM_TYPE = DiffractionImage
 

@@ -108,7 +108,7 @@ class DiffractionImage(EdBaseObject):
         self._collectionTime = pwobj.String()
 
         # Add parameter to state if the image should be ignored in processing
-        self._ignore = pwobj.String()
+        self._ignore = pwobj.Boolean()
 
         # Add information about goniometer rotation axis relative to image
         self._rotX=pwobj.Float()
@@ -272,10 +272,7 @@ class DiffractionImage(EdBaseObject):
         return self._rotX.get(),self._rotY.get(),self._rotZ.get()
 
     def setIgnore(self, true_or_false=False):
-        if true_or_false is True:
-            self._ignore.set('True')
-        else:
-            self._ignore.set('False')
+        self._ignore.set(true_or_false)
     
     def getIgnore(self):
         return self._ignore.get()

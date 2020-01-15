@@ -187,8 +187,7 @@ class ProtImportDiffractionImages(EdBaseProtocol):
             dImg.setFileName(f)
             dImg.setObjId(int(ti))
             if self.skipImages.get() is not None:
-                if int(ti) % self.skipImages.get() == 0:
-                    dImg.setIgnore(true_or_false=True)
+                dImg.setIgnore(true_or_false=bool(int(ti) % self.skipImages.get() == 0))
             dImg.setRotationAxis(rotAxis)
 
             try:

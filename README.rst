@@ -22,7 +22,7 @@ development one can do:
     
     # Install pyworkflow
     git clone --branch=devel git@github.com:scipion-em/scipion-pyworkflow.git
-    python -m pip install -e . scipion-pyworkflow # Install in the environment as development
+    python -m pip install -e scipion-pyworkflow # Install in the environment as development
 
     # Then we can install scipion-ed by:
     git clone git@github.com:scipion-ed/scipion-ed.git

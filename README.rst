@@ -13,18 +13,27 @@ development one can do:
 
 .. code-block:: bash
 
+    # Create a folder for the installation
+    mkdir scipion-ed
+    cd scipion-ed
     # Create a clean virtual environment
-    python -m venv ~/myenv
-    source ~/myenv/bin/activate
-    git clone git@github.com:scipion-em/scipion-pyworkflow.git
-    cd scipion-pyworkflow
-    python -m pip install -e .  # Install in the environment as development
+    python -m virtualenv --python=python3 env
+    source env/bin/activate
+    
+    # Install pyworkflow
+    git clone --branch=devel git@github.com:scipion-em/scipion-pyworkflow.git
+    python -m pip install -e . scipion-pyworkflow # Install in the environment as development
 
     # Then we can install scipion-ed by:
-    cd ..
     git clone git@github.com:scipion-ed/scipion-ed.git
-    cd scipion-ed
-    python -m pip install -e .  # Install in the environment as development
+    python -m pip install -e scipion-ed  # Install in the environment as development
+    
+    # And also install the plugins
+    git clone git@github.com:scipion-ed/scipion-ed-dials.git
+    python -m pip install -e scipion-ed-dials  # Install in the environment as development
+    
+    git clone git@github.com:scipion-ed/scipion-ed-xds.git
+    python -m pip install -e scipion-ed-xds  # Install in the environment as development
 
 Running tests
 .............

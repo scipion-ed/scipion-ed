@@ -50,3 +50,8 @@ Running tests
 
     python scipion-pyworkflow/pyworkflow/apps/pw_project.py TestEdBaseProtocols
 
+Troubleshooting
+...............
+
+If you get "error: command 'x86_64-linux-gnu-gcc' failed with exit status 1" you may need to install python3-dev:
+sudo apt install python3-dev -y

@@ -111,9 +111,9 @@ class DiffractionImage(EdBaseObject):
         self._ignore = pwobj.Boolean()
 
         # Add information about goniometer rotation axis relative to image
-        self._rotX=pwobj.Float()
-        self._rotY=pwobj.Float()
-        self._rotZ=pwobj.Float()
+        self._rotX = pwobj.Float()
+        self._rotY = pwobj.Float()
+        self._rotZ = pwobj.Float()
 
         if location:
             self.setLocation(location)
@@ -187,11 +187,11 @@ class DiffractionImage(EdBaseObject):
 
     def getBeamCenter(self):
         return self._beamCenterX.get(), self._beamCenterY.get()
-    
+
     def getBeamCenterMm(self):
         x = self._beamCenterX.get() * self._pixelSizeX.get()
         y = self._beamCenterY.get() * self._pixelSizeY.get()
-        return x,y
+        return x, y
 
     def setBeamCenter(self, x, y):
         self._beamCenterX.set(x)
@@ -263,17 +263,17 @@ class DiffractionImage(EdBaseObject):
     def setCollectionTime(self, value):
         self._collectionTime.set(value)
 
-    def setRotationAxis(self,rotAxis):
+    def setRotationAxis(self, rotAxis):
         self._rotX.set(rotAxis[0])
         self._rotY.set(rotAxis[1])
         self._rotZ.set(rotAxis[2])
-    
+
     def getRotationAxis(self):
-        return self._rotX.get(),self._rotY.get(),self._rotZ.get()
+        return self._rotX.get(), self._rotY.get(), self._rotZ.get()
 
     def setIgnore(self, true_or_false=False):
         self._ignore.set(true_or_false)
-    
+
     def getIgnore(self):
         return self._ignore.get()
 

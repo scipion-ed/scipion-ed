@@ -246,7 +246,7 @@ class DiffractionImage(EdBaseObject):
         self._dimY.set(value)
 
     def getDetector(self):
-        return self._acquisition.get()
+        return self._detector.get()
 
     def setDetector(self, detector):
         self._detector = detector
@@ -301,3 +301,88 @@ class SetOfDiffractionImages(EdBaseSet):
         for row in uniqueFiles:
             filePaths.add(row['_filename'])
         return filePaths
+
+
+class DiffractionSpot(EdBaseObject):
+    ''' Represents an individual diffraction spot. '''
+
+    def __init__(self, **kwargs):
+        self._spotId = pwobj.Integer()
+        self._bbox = pwobj.Integer()
+        self._flag = pwobj.Integer()
+        self._intensitySumValue = pwobj.Float()
+        self._intensitySumVariance = pwobj.Float()
+        self._nSignal = pwobj.Integer()
+        self._panel = pwobj.Integer()
+        self._shoebox = None
+        self._xyzobsPxValue = pwobj.List()
+        self._xyzobsPxVariance = pwobj.List()
+
+    def setId(self, value):
+        self._spotId.set(value)
+
+    def getId(self):
+        return self._spotId.get()
+
+    def setBbox(self, value):
+        self._bbox.set(value)
+
+    def getBbox(self):
+        return self._bbox.get()
+
+    def setFlag(self, value):
+        self._flag.set(value)
+
+    def getFlag(self):
+        return self._flag.get()
+
+    def setIntensitySumValue(self, value):
+        self._intensitySumValue.set(value)
+
+    def getIntensitySumValue(self):
+        return self._intensitySumValue.get()
+
+    def setIntensitySumVariance(self, value):
+        self._intensitySumVariance.set(value)
+
+    def getIntensitySumVariance(self):
+        return self._intensitySumVariance.get()
+
+    def setNSignal(self, value):
+        self._nSignal.set(value)
+
+    def getNSignal(self):
+        return self._nSignal.get()
+
+    def setPanel(self, value):
+        self._panel.set(value)
+
+    def getPanel(self):
+        return self._panel.get()
+
+    def setShoebox(self, value):
+        self._shoebox.set(value)
+
+    def getShoebox(self):
+        return self._shoebox.get()
+
+    def setXyzobsPxValue(self, value):
+        self._xyzobsPxValue.set(value)
+
+    def getXyzobsPxValue(self):
+        return self._xyzobsPxValue.get()
+
+    def setXyzobsPxVariance(self, value):
+        self._xyzobsPxVariance.set(value)
+
+    def getXyzobsPxVariance(self):
+        return self._xyzobsPxVariance.get()
+
+
+class SetOfSpots(EdBaseSet):
+    ''' Represents a set of diffraction spots, e.g. all spots in a diffraction experiment. '''
+
+    ITEM_TYPE = DiffractionSpot
+
+    def __init__(self, **kwargs):
+        EdBaseSet.__init__(self, **kwargs)

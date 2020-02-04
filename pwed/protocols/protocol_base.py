@@ -28,7 +28,7 @@ import pyworkflow as pw
 import pyworkflow.protocol as pwprot
 from pyworkflow.mapper import SqliteDb
 
-from pwed.objects import DiffractionImage, SetOfDiffractionImages
+from pwed.objects import DiffractionImage, SetOfDiffractionImages, DiffractionSpot, SetOfSpots
 
 
 class EdBaseProtocol(pwprot.Protocol):
@@ -39,7 +39,7 @@ class EdBaseProtocol(pwprot.Protocol):
 
     def __createSet(self, SetClass, template, suffix, **kwargs):
         """ Create a set and set the filename using the suffix.
-        If the file exists, it will be delete. """
+        If the file exists, it will be deleted. """
         setFn = self._getPath(template % suffix)
         # Close the connection to the database if
         # it is open before deleting the file
@@ -53,9 +53,11 @@ class EdBaseProtocol(pwprot.Protocol):
         return self.__createSet(SetOfDiffractionImages,
                                 'diffration-images%s.sqlite', suffix)
 
+    def _createSetOfSpots(self, suffix=''):
+        return self.__createSet(SetOfSpots, 'diffraction-spots%s.sqlite', suffix)
+
 
 class EdProtFindSpots(EdBaseProtocol):
     """ Base protocol for implementations of finding diffraction spots.
     """
     pass
-

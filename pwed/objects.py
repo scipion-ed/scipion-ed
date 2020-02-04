@@ -28,6 +28,7 @@
 # **************************************************************************
 
 import os
+import numpy
 
 import pyworkflow.object as pwobj
 
@@ -307,8 +308,9 @@ class DiffractionSpot(EdBaseObject):
     ''' Represents an individual diffraction spot. '''
 
     def __init__(self, **kwargs):
+        EdBaseObject.__init__(self, **kwargs)
         self._spotId = pwobj.Integer()
-        self._bbox = pwobj.Integer()
+        self._bbox = pwobj.List()
         self._flag = pwobj.Integer()
         self._intensitySumValue = pwobj.Float()
         self._intensitySumVariance = pwobj.Float()
@@ -318,14 +320,19 @@ class DiffractionSpot(EdBaseObject):
         self._xyzobsPxValue = pwobj.List()
         self._xyzobsPxVariance = pwobj.List()
 
-    def setId(self, value):
+    def setSpotId(self, value):
         self._spotId.set(value)
 
-    def getId(self):
+    def getSpotId(self):
         return self._spotId.get()
 
     def setBbox(self, value):
-        self._bbox.set(value)
+        if type(value) is numpy.ndarray:
+            self._bbox.set(list(value))
+        elif type(value) is list:
+            self._bbox.set(value)
+        else:
+            raise TypeError
 
     def getBbox(self):
         return self._bbox.get()
@@ -367,13 +374,23 @@ class DiffractionSpot(EdBaseObject):
         return self._shoebox.get()
 
     def setXyzobsPxValue(self, value):
-        self._xyzobsPxValue.set(value)
+        if type(value) is numpy.ndarray:
+            self._xyzobsPxValue.set(list(value))
+        elif type(value) is list:
+            self._xyzobsPxValue.set(value)
+        else:
+            raise TypeError
 
     def getXyzobsPxValue(self):
         return self._xyzobsPxValue.get()
 
     def setXyzobsPxVariance(self, value):
-        self._xyzobsPxVariance.set(value)
+        if type(value) is numpy.ndarray:
+            self._xyzobsPxVariance.set(list(value))
+        elif type(value) is list:
+            self._xyzobsPxVariance.set(value)
+        else:
+            raise TypeError
 
     def getXyzobsPxVariance(self):
         return self._xyzobsPxVariance.get()
@@ -386,3 +403,10 @@ class SetOfSpots(EdBaseSet):
 
     def __init__(self, **kwargs):
         EdBaseSet.__init__(self, **kwargs)
+        self._numberOfSpots = pwobj.Integer(0)
+
+    def setSpots(self, spots):
+        self._numberOfSpots.set(spots)
+
+    def getSpots(self):
+        return self._numberOfSpots.get()

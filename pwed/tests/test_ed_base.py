@@ -132,12 +132,12 @@ class TestEdBaseProtocols(pwtests.BaseTest):
     @classmethod
     def setUpClass(cls):
         pwtests.setupTestProject(cls, writeLocalConfig=True)
-        cls.dataPath = os.environ.get('SCIPION_TEST_ED',
-                                      '/data/work_software/scipion-ed/')
+        cls.dataPath = os.path.join(pwed.Config.SCIPION_ED_TESTDATA,
+                                    '190503')
 
         if not os.path.exists(cls.dataPath):
-            raise Exception("Can not run ED tests, "
-                            "SCIPION_TEST_ED variable not defined. ")
+            raise Exception("Can not run ED tests, missing file:\n  %s"
+                            % cls.dataPath)
 
     def _runImportImages(self, filesPattern, **kwargs):
         protImport = self.newProtocol(

@@ -29,6 +29,8 @@
 This modules contains classes related with EM
 """
 
+import os
+
 import pyworkflow.plugin as pwplugin
 from pyworkflow.viewer import Viewer
 from pyworkflow.wizard import Wizard
@@ -52,6 +54,12 @@ class Domain(pwplugin.Domain):
 
 class Plugin(pwplugin.Plugin):
     pass
+
+
+class Config:
+    SCIPION_ED = os.environ['SCIPION_ED']
+    SCIPION_ED_TESTDATA = os.environ.get('SCIPION_ED_TESTDATA',
+                                         os.path.join(SCIPION_ED, 'Testdata'))
 
 
 Domain.registerPlugin(__name__)

@@ -1,5 +1,5 @@
 
-scipion-ed (module pwed)
+scipion-ed-base (module pwed)
 ========================
 
 **scipion-ed** is the base plugin defining the Domain for Electron Diffraction image processing.

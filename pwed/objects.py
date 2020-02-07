@@ -310,15 +310,15 @@ class DiffractionSpot(EdBaseObject):
     def __init__(self, **kwargs):
         EdBaseObject.__init__(self, **kwargs)
         self._spotId = pwobj.Integer()
-        self._bbox = pwobj.List()
+        self._bbox = pwobj.CsvList()
         self._flag = pwobj.Integer()
         self._intensitySumValue = pwobj.Float()
         self._intensitySumVariance = pwobj.Float()
         self._nSignal = pwobj.Integer()
         self._panel = pwobj.Integer()
         self._shoebox = None
-        self._xyzobsPxValue = pwobj.List()
-        self._xyzobsPxVariance = pwobj.List()
+        self._xyzobsPxValue = pwobj.CsvList()
+        self._xyzobsPxVariance = pwobj.CsvList()
 
     def setSpotId(self, value):
         self._spotId.set(value)

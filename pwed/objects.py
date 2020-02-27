@@ -410,3 +410,13 @@ class SetOfSpots(EdBaseSet):
 
     def getSpots(self):
         return self._numberOfSpots.get()
+
+
+class IndexedSpot(DiffractionSpot):
+    def __init__(self, **kwargs):
+        DiffractionSpot.__init__(self, **kwargs)
+
+
+class SetOfIndexedSpots(SetOfSpots):
+    def __init__(self, **kwargs):
+        SetOfSpots.__init__(self, **kwargs)

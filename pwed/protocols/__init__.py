@@ -24,7 +24,5 @@
 # *
 # **************************************************************************
 
-from .protocol_base import EdBaseProtocol, EdProtFindSpots
+from .protocol_base import EdBaseProtocol, EdProtFindSpots, EdProtIndexSpots
 from .protocol_import_diffraction_images import ProtImportDiffractionImages
-
-

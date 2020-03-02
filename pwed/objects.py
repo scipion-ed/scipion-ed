@@ -286,6 +286,27 @@ class SetOfDiffractionImages(EdBaseSet):
 
     def __init__(self, **kwargs):
         EdBaseSet.__init__(self, **kwargs)
+        self._skipImages = pwobj.Integer()
+        self._dialsModelPath = pwobj.String()
+        self._dialsReflPath = pwobj.String()
+
+    def setSkipImages(self, skip):
+        self._skipImages.set(skip)
+
+    def getSkipImages(self):
+        return self._skipImages.get()
+
+    def setDialsModel(self, path):
+        self._dialsModelPath.set(path)
+
+    def getDialsModel(self):
+        return self._dialsModelPath.get()
+
+    def setDialsRefl(self, path):
+        self._dialsReflPath.set(path)
+
+    def getDialsRefl(self):
+        return self._dialsReflPath.get()
 
     def copyInfo(self, other):
         """ Copy basic information (sampling rate and ctf)
@@ -404,6 +425,27 @@ class SetOfSpots(EdBaseSet):
     def __init__(self, **kwargs):
         EdBaseSet.__init__(self, **kwargs)
         self._numberOfSpots = pwobj.Integer(0)
+        self._skipImages = pwobj.Integer()
+        self._dialsModelPath = pwobj.String()
+        self._dialsReflPath = pwobj.String()
+
+    def setSkipImages(self, skip):
+        self._skipImages.set(skip)
+
+    def getSkipImages(self):
+        return self._skipImages.get()
+
+    def setDialsModel(self, path):
+        self._dialsModelPath.set(path)
+
+    def getDialsModel(self):
+        return self._dialsModelPath.get()
+
+    def setDialsRefl(self, path):
+        self._dialsReflPath.set(path)
+
+    def getDialsRefl(self):
+        return self._dialsReflPath.get()
 
     def setSpots(self, spots):
         self._numberOfSpots.set(spots)

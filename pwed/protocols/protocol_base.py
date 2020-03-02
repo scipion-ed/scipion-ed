@@ -51,7 +51,7 @@ class EdBaseProtocol(pwprot.Protocol):
 
     def _createSetOfDiffractionImages(self, suffix=''):
         return self.__createSet(SetOfDiffractionImages,
-                                'diffration-images%s.sqlite', suffix)
+                                'diffraction-images%s.sqlite', suffix)
 
     def _createSetOfSpots(self, suffix=''):
         return self.__createSet(SetOfSpots, 'diffraction-spots%s.sqlite', suffix)

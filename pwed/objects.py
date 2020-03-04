@@ -455,13 +455,17 @@ class SetOfSpots(EdBaseSet):
 
 
 class IndexedSpot(DiffractionSpot):
+    # TODO: Add HKL-indexing
     def __init__(self, **kwargs):
         DiffractionSpot.__init__(self, **kwargs)
 
 
-class SetOfIndexedSpots(SetOfSpots):
+class SetOfIndexedSpots(SetOfSpots, SetOfDiffractionImages):
+    # TODO: Add space group
+    # TODO: Add unit cell parameters
     def __init__(self, **kwargs):
         SetOfSpots.__init__(self, **kwargs)
+        SetOfDiffractionImages.__init__(self, **kwargs)
 
 
 class RefinedSpot(IndexedSpot):

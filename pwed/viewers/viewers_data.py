@@ -46,4 +46,3 @@ class EdDataViewer(pwviewer.Viewer):
 
         if issubclass(cls, SetOfDiffractionImages):
             return [self.objectView(obj)]
-

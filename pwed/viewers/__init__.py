@@ -24,4 +24,4 @@
 # *
 # **************************************************************************
 
-from .viewers_data import EdDataViewer
+# from .viewers_data import EdDataViewer

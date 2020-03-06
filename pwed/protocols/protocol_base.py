@@ -82,3 +82,7 @@ class EdProtRefineSpots(EdBaseProtocol):
 
 class EdProtIntegrateSpots(EdBaseProtocol):
     pass
+
+
+class EdProtExport(EdBaseProtocol):
+    pass

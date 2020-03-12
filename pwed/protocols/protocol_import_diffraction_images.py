@@ -97,8 +97,8 @@ class ProtImportDiffractionImages(EdBaseProtocol):
                            "Required for data collected with defocusing to "
                            "track images back to the aperture or beam.\n"
                            "A value of 10 will skip every 10th frame.")
-        
-        form.addParam('rotationAxis',pwprot.StringParam, default='0.7825634081905295,-0.6225708892658111,0.0',
+
+        form.addParam('rotationAxis', pwprot.StringParam, default='0.7825634081905295,-0.6225708892658111,0.0',
                       label="Rotation axis",
                       help="The goniometer rotation axis relative to the image.")
 
@@ -183,11 +183,13 @@ class ProtImportDiffractionImages(EdBaseProtocol):
 
         dImg = DiffractionImage()
 
+        # FIXME: Use ts to differentiate multiple sets
         for f, ts, ti in self.getMatchingFiles():
             dImg.setFileName(f)
             dImg.setObjId(int(ti))
             if self.skipImages.get() is not None:
-                dImg.setIgnore(true_or_false=bool(int(ti) % self.skipImages.get() == 0))
+                dImg.setIgnore(true_or_false=bool(int(ti) %
+                                                  self.skipImages.get() == 0))
             dImg.setRotationAxis(rotAxis)
 
             try:

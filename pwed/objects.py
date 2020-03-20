@@ -486,3 +486,31 @@ class IntegratedSpot(IndexedSpot):
 class SetOfIntegratedSpots(SetOfIndexedSpots):
     def __init__(self, **kwargs):
         SetOfIndexedSpots.__init__(self, **kwargs)
+
+
+class ExportFile(EdBaseObject):
+    def __init__(self, **kwargs):
+        EdBaseObject.__init__(self, **kwargs)
+        self._dialsExportedPath = pwobj.String()
+        self._fileType = pwobj.String()
+
+    def setExportFile(self, path):
+        self._dialsExportedPath.set(path)
+
+    def getExportFile(self):
+        return self._dialsExportedPath.get()
+
+    def setFileType(self, file_type):
+        self._fileType.set(file_type)
+
+    def getFileType(self):
+        return self._fileType.get()
+
+
+class SetOfExportFiles(EdBaseSet):
+    ''' Represents a set of exported files. '''
+
+    ITEM_TYPE = ExportFile
+
+    def __init__(self, **kwargs):
+        EdBaseSet.__init__(self, **kwargs)

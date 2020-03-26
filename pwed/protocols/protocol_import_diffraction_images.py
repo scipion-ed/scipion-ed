@@ -1,8 +1,10 @@
 # **************************************************************************
 # *
 # * Authors:     J.M. De la Rosa Trevin (delarosatrevin@scilifelab.se) [1]
+# *              V. E.G. Bengtsson (viktor.bengtsson@mmk.su.se) [2]
 # *
 # * [1] SciLifeLab, Stockholm University
+# * [2] Department of Materials and Environmental Chemistry, Stockholm University
 # *
 # * This program is free software; you can redistribute it and/or modify
 # * it under the terms of the GNU General Public License as published by
@@ -26,6 +28,7 @@
 
 import os
 import re
+import pathlib
 from glob import glob
 
 import pyworkflow as pw
@@ -98,93 +101,103 @@ class ProtImportDiffractionImages(EdBaseProtocol):
                            "track images back to the aperture or beam.\n"
                            "A value of 10 will skip every 10th frame.")
 
-        form.addParam('rotationAxis', pwprot.StringParam, default='0.7825634081905295,-0.6225708892658111,0.0',
+        form.addParam('rotationAxis', pwprot.StringParam, default=None,
+                      allowsNull=True,
                       label="Rotation axis",
                       help="The goniometer rotation axis relative to the image.")
 
-        form.addSection(label='Overwrite header file')
+        group = form.addGroup('Overwrite header file',
+                              expertLevel=pwprot.LEVEL_ADVANCED,)
 
-        form.addParam('overwriteWavelength', pwprot.StringParam,
-                      default=None,
-                      allowsNull=True,
-                      label="Set wavelength",
-                      help="Overwrites the wavelength found from the headerfile.")
+        group.addParam('overwriteWavelength', pwprot.StringParam,
+                       default=None,
+                       allowsNull=True,
+                       label="Set wavelength",
+                       help="Overwrites the wavelength found from the headerfile.")
 
-        form.addParam('overwriteSize1', pwprot.StringParam,
-                      default=None,
-                      allowsNull=True,
-                      label="Set Size1",
-                      help="Overwrites the Size1 found from the headerfile.")
+        group.addParam('overwriteSize1', pwprot.StringParam,
+                       default=None,
+                       allowsNull=True,
+                       label="Set Size1",
+                       help="Overwrites the Size1 found from the headerfile.")
 
-        form.addParam('overwriteSize2', pwprot.StringParam,
-                      default=None,
-                      allowsNull=True,
-                      label="Set Size2",
-                      help="Overwrites the Size2 found from the headerfile.")
+        group.addParam('overwriteSize2', pwprot.StringParam,
+                       default=None,
+                       allowsNull=True,
+                       label="Set Size2",
+                       help="Overwrites the Size2 found from the headerfile.")
 
-        form.addParam('overwritePixelSize', pwprot.StringParam,
-                      default=None,
-                      allowsNull=True,
-                      label="Set pixel size",
-                      help="Overwrites the pixel size found from the headerfile.")
+        group.addParam('overwritePixelSize', pwprot.StringParam,
+                       default=None,
+                       allowsNull=True,
+                       label="Set pixel size",
+                       help="Overwrites the pixel size found from the headerfile.")
 
-        form.addParam('overwriteExposureTime', pwprot.StringParam,
-                      default=None,
-                      allowsNull=True,
-                      label="Set exposure time",
-                      help="Overwrites the exposure time found from the headerfile.")
+        group.addParam('overwriteExposureTime', pwprot.StringParam,
+                       default=None,
+                       allowsNull=True,
+                       label="Set exposure time",
+                       help="Overwrites the exposure time found from the headerfile.")
 
-        form.addParam('overwriteDetectorDistance', pwprot.StringParam,
-                      default=None,
-                      allowsNull=True,
-                      label="Set detector distance",
-                      help="Overwrites the detector distance found from the headerfile.")
+        group.addParam('overwriteDetectorDistance', pwprot.StringParam,
+                       default=None,
+                       allowsNull=True,
+                       label="Set detector distance",
+                       help="Overwrites the detector distance found from the headerfile.")
 
-        form.addParam('overwriteOscStart', pwprot.StringParam,
-                      default=None,
-                      allowsNull=True,
-                      label="Set starting angle",
-                      help="Overwrites the starting angle found from the headerfile.")
+        group.addParam('overwriteOscStart', pwprot.StringParam,
+                       default=None,
+                       allowsNull=True,
+                       label="Set starting angle",
+                       help="Overwrites the starting angle found from the headerfile.")
 
-        form.addParam('overwriteOscRange', pwprot.StringParam,
-                      default=None,
-                      allowsNull=True,
-                      label="Set oscillation range",
-                      help="Overwrites the oscillation range found from the headerfile.")
+        group.addParam('overwriteOscRange', pwprot.StringParam,
+                       default=None,
+                       allowsNull=True,
+                       label="Set oscillation range",
+                       help="Overwrites the oscillation range found from the headerfile.")
 
-        form.addParam('overwriteBeamCenterX', pwprot.StringParam,
-                      default=None,
-                      allowsNull=True,
-                      label="Set beam center X",
-                      help="Overwrites the beam center X found from the headerfile.")
+        group.addParam('overwriteBeamCenterX', pwprot.StringParam,
+                       default=None,
+                       allowsNull=True,
+                       label="Set beam center X",
+                       help="Overwrites the beam center X found from the headerfile.")
 
-        form.addParam('overwriteBeamCenterY', pwprot.StringParam,
-                      default=None,
-                      allowsNull=True,
-                      label="Set beam center Y",
-                      help="Overwrites the beam center Y found from the headerfile.")
+        group.addParam('overwriteBeamCenterY', pwprot.StringParam,
+                       default=None,
+                       allowsNull=True,
+                       label="Set beam center Y",
+                       help="Overwrites the beam center Y found from the headerfile.")
 
     # -------------------------- INSERT functions ------------------------------
     def _insertAllSteps(self):
         self.loadPatterns()
-        self._insertFunctionStep('importStep', self._pattern)
+        self._insertFunctionStep('convertInputStep', self._pattern)
+        self._insertFunctionStep('importStep')
+        self._insertFunctionStep('createOutputStep')
 
     # -------------------------- STEPS functions -------------------------------
-    def importStep(self, pattern):
+    def convertInputStep(self, pattern):
         self.loadPatterns()
         self.info("Using glob pattern: '%s'" % self._globPattern)
         self.info("Using regex pattern: '%s'" % self._regexPattern)
+        # FIXME: Use this to handle multiple input directories
+
+    def importStep(self):
+        pass
+
+    def createOutputStep(self):
+        rotAxis = self.getRotationAxis()
 
         outputSet = self._createSetOfDiffractionImages()
+        outputSet.setSkipImages(self.skipImages.get())
 
-        # f, _, _ = self.getMatchingFiles()[0]
-        # h = self.readSmvHeader(f)
-        rotAxis = [float(s) for s in self.rotationAxis.get().split(",")]
 
-        dImg = DiffractionImage()
 
-        # FIXME: Use ts to differentiate multiple sets
-        for f, ts, ti in self.getMatchingFiles():
+      dImg = DiffractionImage()
+
+       # FIXME: Use ts to differentiate multiple sets
+       for f, ts, ti in self.getMatchingFiles():
             dImg.setFileName(f)
             dImg.setObjId(int(ti))
             if self.skipImages.get() is not None:
@@ -261,6 +274,10 @@ class ProtImportDiffractionImages(EdBaseProtocol):
                 matchingFiles.append((f, m.group('TS'), int(m.group('TI'))))
 
         return matchingFiles
+
+    def getRotationAxis(self):
+        rotAxis = [float(s) for s in self.rotationAxis.get().split(",")]
+        return rotAxis
 
     def getCopyOrLink(self):
         # Set a function to copyFile or createLink

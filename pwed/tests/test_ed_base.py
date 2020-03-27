@@ -117,7 +117,7 @@ class TestEdBase(pwtests.BaseTest):
         self.assertEqual(testSet2.getSize(), N)
         for dImg2 in testSet2:
             self.assertEqual(dImg2.getPixelSize(), 0.055)
-            self.assertEqual(dImg2.getDim(), (516,516))
+            self.assertEqual(dImg2.getDim(), (516, 516))
             self.assertEqual(dImg2.getWavelength(), 0.0251)
             self.assertEqual(dImg2.getDistance(), 532.2773)
             self.assertEqual(dImg2.getOscillation(), (-33.9000, 0.3512))
@@ -163,11 +163,11 @@ class TestEdBaseProtocols(pwtests.BaseTest):
         return owDict
 
     def test_import(self):
-        protImport = self._runImportImages('{TS}/RED/{TI}.mrc')
+        protImport = self._runImportImages('experiment_12/RED/{TI}.mrc')
         output = getattr(protImport, 'outputDiffractionImages', None)
         self.assertFalse(output is None)
 
-        protImport2 = self._runImportImages('{TS}/SMV/data/{TI}.img')
+        protImport2 = self._runImportImages('experiment_12/SMV/data/{TI}.img')
         output = getattr(protImport2, 'outputDiffractionImages', None)
         self.assertFalse(output is None)
         for img in output:
@@ -184,23 +184,24 @@ class TestEdBaseProtocols(pwtests.BaseTest):
 
         overwriteDict = self.mockOverwrite()
         owImport = self._runImportImages(
-            '{TS}/SMV/data/{TI}.img', **overwriteDict)
+            'experiment_12/SMV/data/{TI}.img', **overwriteDict)
         output = getattr(owImport, 'outputDiffractionImages', None)
         self.assertFalse(output is None)
         for img in output:
             self.assertEqual(img.getPixelSize(), 1000)
-            self.assertEqual(img.getDim(), (1000,1000))
+            self.assertEqual(img.getDim(), (1000, 1000))
             self.assertEqual(img.getWavelength(), 1000)
             self.assertEqual(img.getDistance(), 1000)
             self.assertEqual(img.getOscillation(), (1000, 1000))
             self.assertEqual(img.getBeamCenter(), (1000, 1000))
             self.assertEqual(img.getExposureTime(), 1000)
-        
-        protImport3 = self._runImportImages('{TS}/SMV/data/{TI}.img',skipImages=10,rotationAxis='1000,1000,0')
+
+        protImport3 = self._runImportImages(
+            'experiment_12/SMV/data/{TI}.img', skipImages=10, rotationAxis='1000,1000,0')
         output = getattr(protImport3, 'outputDiffractionImages', None)
         self.assertFalse(output is None)
         for img in output:
-            self.assertNotEqual(img.getObjId(),0)
+            self.assertNotEqual(img.getObjId(), 0)
             if img.getObjId() % 10 == 0:
                 self.assertTrue(img.getIgnore())
-            self.assertEqual(img.getRotationAxis(),(1000.0,1000.0,0.0))
+            self.assertEqual(img.getRotationAxis(), (1000.0, 1000.0, 0.0))

@@ -70,17 +70,15 @@ class ProtImportDiffractionImages(EdBaseProtocol):
 
         form.addParam('filesPath', pwprot.PathParam,
                       label="Files directory",
-                      help="Root directory of the tilt-series (or movies).")
+                      help="Directory with images to be imported.")
         form.addParam('filesPattern', pwprot.StringParam,
                       label='Pattern',
-                      help="Pattern of the tilt series\n\n"
+                      help="Pattern of the experiment\n\n"
                            "The pattern can contain standard wildcards such as\n"
                            "*, ?, etc.\n\n"
-                           "It should also contains the following special tags:"
-                           "   {TS}: tilt series identifier "
-                           "         (can be any UNIQUE part of the path).\n"
+                           "It should also contains the following special tag:"
                            "   {TI}: image identifier "
-                           "         (an integer value, unique within a tilt-series).\n"
+                           "         (an integer value, unique within the experiment).\n"
                            "Examples:\n"
                            "")
         form.addParam('importAction', pwprot.EnumParam,
@@ -106,14 +104,22 @@ class ProtImportDiffractionImages(EdBaseProtocol):
                       label="Rotation axis",
                       help="The goniometer rotation axis relative to the image.")
 
-        group = form.addGroup('Overwrite header file',
-                              expertLevel=pwprot.LEVEL_ADVANCED,)
+        group = form.addGroup('Corrected parameters')
 
         group.addParam('overwriteWavelength', pwprot.StringParam,
                        default=None,
                        allowsNull=True,
-                       label="Set wavelength",
-                       help="Overwrites the wavelength found from the headerfile.")
+                       label="Corrected wavelength",
+                       help="Use this value instead of the value found in the file header.")
+
+        group.addParam('overwriteDetectorDistance', pwprot.StringParam,
+                       default=None,
+                       allowsNull=True,
+                       label="Set detector distance",
+                       help="Use a different detector distance than found in the file header.")
+
+        group = form.addGroup('Overwrite file header',
+                              expertLevel=pwprot.LEVEL_ADVANCED,)
 
         group.addParam('overwriteSize1', pwprot.StringParam,
                        default=None,
@@ -138,12 +144,6 @@ class ProtImportDiffractionImages(EdBaseProtocol):
                        allowsNull=True,
                        label="Set exposure time",
                        help="Overwrites the exposure time found from the headerfile.")
-
-        group.addParam('overwriteDetectorDistance', pwprot.StringParam,
-                       default=None,
-                       allowsNull=True,
-                       label="Set detector distance",
-                       help="Overwrites the detector distance found from the headerfile.")
 
         group.addParam('overwriteOscStart', pwprot.StringParam,
                        default=None,
@@ -173,7 +173,6 @@ class ProtImportDiffractionImages(EdBaseProtocol):
     def _insertAllSteps(self):
         self.loadPatterns()
         self._insertFunctionStep('convertInputStep', self._pattern)
-        self._insertFunctionStep('importStep')
         self._insertFunctionStep('createOutputStep')
 
     # -------------------------- STEPS functions -------------------------------
@@ -181,29 +180,21 @@ class ProtImportDiffractionImages(EdBaseProtocol):
         self.loadPatterns()
         self.info("Using glob pattern: '%s'" % self._globPattern)
         self.info("Using regex pattern: '%s'" % self._regexPattern)
-        # FIXME: Use this to handle multiple input directories
 
-    def importStep(self):
-        pass
-
-    def createOutputStep(self):
-        rotAxis = self.getRotationAxis()
-
+    def createOutputStep(self, **kwargs):
         outputSet = self._createSetOfDiffractionImages()
+        outputSet.setDialsModel(kwargs.get('dialsModel'))
         outputSet.setSkipImages(self.skipImages.get())
 
+        dImg = DiffractionImage()
 
-
-      dImg = DiffractionImage()
-
-       # FIXME: Use ts to differentiate multiple sets
-       for f, ts, ti in self.getMatchingFiles():
+        for f, ti in self.getMatchingFiles():
             dImg.setFileName(f)
             dImg.setObjId(int(ti))
             if self.skipImages.get() is not None:
                 dImg.setIgnore(true_or_false=bool(int(ti) %
                                                   self.skipImages.get() == 0))
-            dImg.setRotationAxis(rotAxis)
+            dImg.setRotationAxis(self.getRotationAxis())
 
             try:
                 if f.endswith('.img'):
@@ -248,15 +239,20 @@ class ProtImportDiffractionImages(EdBaseProtocol):
         self._pattern = os.path.join(self.filesPath.get('').strip(),
                                      self.filesPattern.get('').strip())
 
-        def _replace(p, ts, ti):
+        """ def _replace(p, ts, ti):
             p = p.replace('{TS}', ts)
+            p = p.replace('{TI}', ti)
+            return p """
+
+        def _replace(p, ti):
             p = p.replace('{TI}', ti)
             return p
 
         self._regexPattern = _replace(self._pattern.replace('*', '(.*)'),
-                                      '(?P<TS>.*)', r'(?P<TI>\d+)')
+                                      # '(?P<TS>.*)',
+                                      r'(?P<TI>\d+)')
         self._regex = re.compile(self._regexPattern)
-        self._globPattern = _replace(self._pattern, '*', '*')
+        self._globPattern = _replace(self._pattern, '*')
 
     def getMatchingFiles(self):
         """ Return a sorted list with the paths of files that
@@ -271,13 +267,13 @@ class ProtImportDiffractionImages(EdBaseProtocol):
         for f in filePaths:
             m = self._regex.match(f)
             if m is not None:
-                matchingFiles.append((f, m.group('TS'), int(m.group('TI'))))
+                matchingFiles.append((f, int(m.group('TI'))))
 
         return matchingFiles
 
     def getRotationAxis(self):
-        rotAxis = [float(s) for s in self.rotationAxis.get().split(",")]
-        return rotAxis
+        axis = [float(s) for s in self.rotationAxis.get().split(",")]
+        return axis
 
     def getCopyOrLink(self):
         # Set a function to copyFile or createLink

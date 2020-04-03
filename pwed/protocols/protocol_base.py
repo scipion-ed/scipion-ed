@@ -28,7 +28,8 @@ import pyworkflow as pw
 import pyworkflow.protocol as pwprot
 from pyworkflow.mapper import SqliteDb
 
-from pwed.objects import DiffractionImage, SetOfDiffractionImages, DiffractionSpot, SetOfSpots, IndexedSpot, SetOfIndexedSpots, RefinedSpot, SetOfRefinedSpots, IntegratedSpot, SetOfIntegratedSpots, SetOfExportFiles
+
+from pwed.objects import DiffractionImage, SetOfDiffractionImages, DiffractionSpot, SetOfSpots, IndexedSpot, SetOfIndexedSpots, SetOfExportFiles, RefinedSpot, SetOfRefinedSpots, IntegratedSpot, SetOfIntegratedSpots
 
 
 class EdBaseProtocol(pwprot.Protocol):
@@ -66,7 +67,7 @@ class EdBaseProtocol(pwprot.Protocol):
         return self.__createSet(SetOfIntegratedSpots, 'integrated-spots%s.sqlite', suffix)
 
     def _createSetOfExportFiles(self, suffix=''):
-        return self.__createSet(SetOfExportFiles, 'integrated-spots%s.sqlite', suffix)
+        return self.__createSet(SetOfExportFiles, 'export-files%s.sqlite', suffix)
 
 
 class EdProtFindSpots(EdBaseProtocol):

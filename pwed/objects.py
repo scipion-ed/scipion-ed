@@ -463,6 +463,8 @@ class IndexedSpot(DiffractionSpot):
 class SetOfIndexedSpots(SetOfSpots, SetOfDiffractionImages):
     # TODO: Add space group
     # TODO: Add unit cell parameters
+    ITEM_TYPE = IndexedSpot
+
     def __init__(self, **kwargs):
         SetOfSpots.__init__(self, **kwargs)
         SetOfDiffractionImages.__init__(self, **kwargs)
@@ -494,10 +496,10 @@ class ExportFile(EdBaseObject):
         self._dialsExportedPath = pwobj.String()
         self._fileType = pwobj.String()
 
-    def setExportFile(self, path):
+    def setFilePath(self, path):
         self._dialsExportedPath.set(path)
 
-    def getExportFile(self):
+    def getFilePath(self):
         return self._dialsExportedPath.get()
 
     def setFileType(self, file_type):

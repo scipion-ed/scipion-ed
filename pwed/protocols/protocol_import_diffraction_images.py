@@ -104,6 +104,18 @@ class ProtImportDiffractionImages(EdBaseProtocol):
                       label="Rotation axis",
                       help="The goniometer rotation axis relative to the image.")
 
+        # Enable using template
+        group = form.group = form.addGroup('Template input')
+        group.addParam('useTemplate', pwprot.BooleanParam,
+                       label='Use template syntax', default=False,
+                       help="Explicitly set a template syntax to use for DIALS import or XDS input file",
+                       )
+        group.addParam('tsReplacement', pwprot.StringParam,
+                       label='String to insert instead of {TS}',
+                       default='00###',
+                       help="Only useful in XDS or when using template in DIALS.",
+                       )
+
         group = form.addGroup('Corrected parameters')
 
         group.addParam('overwriteWavelength', pwprot.StringParam,
@@ -239,20 +251,16 @@ class ProtImportDiffractionImages(EdBaseProtocol):
         self._pattern = os.path.join(self.filesPath.get('').strip(),
                                      self.filesPattern.get('').strip())
 
-        """ def _replace(p, ts, ti):
-            p = p.replace('{TS}', ts)
-            p = p.replace('{TI}', ti)
-            return p """
-
         def _replace(p, ti):
             p = p.replace('{TI}', ti)
             return p
 
         self._regexPattern = _replace(self._pattern.replace('*', '(.*)'),
-                                      # '(?P<TS>.*)',
                                       r'(?P<TI>\d+)')
         self._regex = re.compile(self._regexPattern)
         self._globPattern = _replace(self._pattern, '*')
+        self._templatePattern = _replace(
+            self._pattern, self.tsReplacement.get())
 
     def getMatchingFiles(self):
         """ Return a sorted list with the paths of files that

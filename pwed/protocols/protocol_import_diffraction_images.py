@@ -99,10 +99,18 @@ class ProtImportDiffractionImages(EdBaseProtocol):
                            "track images back to the aperture or beam.\n"
                            "A value of 10 will skip every 10th frame.")
 
+        form.addParam('replaceRotationAxis', pwprot.BooleanParam,
+                      label='Overwrite rotation axis?', default=False,
+                      help="The rotation axis is an instrument parameter. If the correct parameter is not given automatically, it might need to be overwritten here.",
+                      expertLevel=pwprot.LEVEL_ADVANCED,
+                      )
+
         form.addParam('rotationAxis', pwprot.StringParam, default=None,
                       allowsNull=True,
                       label="Rotation axis",
-                      help="The goniometer rotation axis relative to the image.")
+                      help="The goniometer rotation axis relative to the image.",
+                      condition="replaceRotationAxis",
+                      )
 
         # Enable using template
         group = form.group = form.addGroup('Template input')
@@ -206,7 +214,8 @@ class ProtImportDiffractionImages(EdBaseProtocol):
             if self.skipImages.get() is not None:
                 dImg.setIgnore(true_or_false=bool(int(ti) %
                                                   self.skipImages.get() == 0))
-            dImg.setRotationAxis(self.getRotationAxis())
+            if self.getRotationAxis():
+                dImg.setRotationAxis(self.getRotationAxis())
 
             try:
                 if f.endswith('.img'):
@@ -280,7 +289,10 @@ class ProtImportDiffractionImages(EdBaseProtocol):
         return matchingFiles
 
     def getRotationAxis(self):
-        axis = [float(s) for s in self.rotationAxis.get().split(",")]
+        try:
+            axis = [float(s) for s in self.rotationAxis.get().split(",")]
+        except ValueError:
+            axis = None
         return axis
 
     def getCopyOrLink(self):

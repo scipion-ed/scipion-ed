@@ -470,26 +470,6 @@ class SetOfIndexedSpots(SetOfSpots, SetOfDiffractionImages):
         SetOfDiffractionImages.__init__(self, **kwargs)
 
 
-class RefinedSpot(IndexedSpot):
-    def __init__(self, **kwargs):
-        IndexedSpot.__init__(self, **kwargs)
-
-
-class SetOfRefinedSpots(SetOfIndexedSpots):
-    def __init__(self, **kwargs):
-        SetOfIndexedSpots.__init__(self, **kwargs)
-
-
-class IntegratedSpot(IndexedSpot):
-    def __init__(self, **kwargs):
-        IndexedSpot.__init__(self, **kwargs)
-
-
-class SetOfIntegratedSpots(SetOfIndexedSpots):
-    def __init__(self, **kwargs):
-        SetOfIndexedSpots.__init__(self, **kwargs)
-
-
 class ExportFile(EdBaseObject):
     def __init__(self, **kwargs):
         EdBaseObject.__init__(self, **kwargs)

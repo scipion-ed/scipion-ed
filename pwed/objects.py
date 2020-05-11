@@ -73,6 +73,7 @@ class DiffractionImage(EdBaseObject):
         # Image location is composed by an index and a filename
         self._index = pwobj.Integer(0)
         self._filename = pwobj.String()
+        self._experimentId = pwobj.String()
 
         # Detector distance of this image
         self._distance = pwobj.Float()
@@ -132,6 +133,12 @@ class DiffractionImage(EdBaseObject):
     def setFileName(self, filename):
         """ Use the _objValue attribute to store filename. """
         self._filename.set(filename)
+    
+    def setExperimentId(self, experimentId):
+        self._experimentId.set(experimentId)
+    
+    def getExperimentId(self):
+        return self._experimentId.get()
 
     def getLocation(self):
         """ This function return the image index and filename.
@@ -468,25 +475,61 @@ class SetOfIndexedSpots(SetOfSpots, SetOfDiffractionImages):
     def __init__(self, **kwargs):
         SetOfSpots.__init__(self, **kwargs)
         SetOfDiffractionImages.__init__(self, **kwargs)
+        self._spaceGroupNumber = pwobj.Integer()
+        self._unitCell = pwobj.String()
+
+    def setSpaceGroupNumber(number):
+        if type(number) is int:
+            self._spaceGroupNumber.set(number)
+        elif type(number) is str:
+            nr = int(number)
+            self._spaceGroupNumber.set(nr)
+
+    def getSpaceGroupNumber(self):
+        return self._spaceGroupNumber.get()
+
+    def setUnitCell(cellStr):
+        self._unitCell.set(cellStr)
+
+    def getUnitCell(self):
+        return self._unitCell.get()
 
 
 class ExportFile(EdBaseObject):
     def __init__(self, **kwargs):
         EdBaseObject.__init__(self, **kwargs)
-        self._dialsExportedPath = pwobj.String()
+        self._filePath = pwobj.String()
         self._fileType = pwobj.String()
+        self._spaceGroupNumber = pwobj.Integer()
+        self._unitCell = pwobj.String()
 
     def setFilePath(self, path):
-        self._dialsExportedPath.set(path)
+        self._filePath.set(path)
 
     def getFilePath(self):
-        return self._dialsExportedPath.get()
+        return self._filePath.get()
 
     def setFileType(self, file_type):
         self._fileType.set(file_type)
 
     def getFileType(self):
         return self._fileType.get()
+
+    def setSpaceGroupNumber(number):
+        if type(number) is int:
+            self._spaceGroupNumber.set(number)
+        elif type(number) is str:
+            nr = int(number)
+            self._spaceGroupNumber.set(nr)
+
+    def getSpaceGroupNumber(self):
+        return self._spaceGroupNumber.get()
+
+    def setUnitCell(cellStr):
+        self._unitCell.set(cellStr)
+
+    def getUnitCell(self):
+        return self._unitCell.get()
 
 
 class SetOfExportFiles(EdBaseSet):

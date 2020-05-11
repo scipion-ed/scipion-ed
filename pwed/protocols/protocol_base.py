@@ -29,7 +29,7 @@ import pyworkflow.protocol as pwprot
 from pyworkflow.mapper import SqliteDb
 
 
-from pwed.objects import DiffractionImage, SetOfDiffractionImages, DiffractionSpot, SetOfSpots, IndexedSpot, SetOfIndexedSpots, SetOfExportFiles
+from pwed.objects import DiffractionImage, SetOfDiffractionImages, DiffractionSpot, SetOfSpots, IndexedSpot, SetOfIndexedSpots, ExportFile, SetOfExportFiles
 
 
 class EdBaseProtocol(pwprot.Protocol):

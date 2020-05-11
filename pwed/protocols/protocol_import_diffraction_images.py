@@ -77,6 +77,7 @@ class ProtImportDiffractionImages(EdBaseProtocol):
                            "The pattern can contain standard wildcards such as\n"
                            "*, ?, etc.\n\n"
                            "It should also contains the following special tag:"
+                           "   {EI}: experiment identifier "
                            "   {TI}: image identifier "
                            "         (an integer value, unique within the experiment).\n"
                            "Examples:\n"

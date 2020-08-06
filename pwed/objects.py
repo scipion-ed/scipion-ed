@@ -468,6 +468,13 @@ class SetOfIndexedSpots(SetOfSpots, SetOfDiffractionImages):
     def __init__(self, **kwargs):
         SetOfSpots.__init__(self, **kwargs)
         SetOfDiffractionImages.__init__(self, **kwargs)
+        self._dialsHtmlPath = pwobj.String()
+
+    def setDialsHtml(self, path):
+        self._dialsHtmlPath.set(path)
+
+    def getDialsHtml(self):
+        return self._dialsHtmlPath.get()
 
 
 class ExportFile(EdBaseObject):

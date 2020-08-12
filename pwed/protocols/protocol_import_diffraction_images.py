@@ -119,7 +119,7 @@ class ProtImportDiffractionImages(EdBaseProtocol):
                        help="Explicitly set a template syntax to use for DIALS import or XDS input file",
                        )
         group.addParam('tsReplacement', pwprot.StringParam,
-                       label='String to insert instead of {TS}',
+                       label='String to insert instead of {TI}',
                        default='00###',
                        help="Only useful in XDS or when using template in DIALS.",
                        )

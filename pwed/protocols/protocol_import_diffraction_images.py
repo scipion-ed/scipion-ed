@@ -244,6 +244,13 @@ class ProtImportDiffractionImages(EdBaseProtocol):
         errors = []
         return errors
 
+    def _summary(self):
+        summary = []
+        summary.append('Data in {}'.format(
+            self.getFileParents(self.getMatchingFiles())))
+
+        return summary
+
     # -------------------------- BASE methods to be overridden -----------------
     def _getImportChoices(self):
         """ Return a list of possible choices
@@ -296,6 +303,17 @@ class ProtImportDiffractionImages(EdBaseProtocol):
                        "{}".format(e))
             axis = None
         return axis
+
+    def getFileParents(self, file_list):
+        uniquePaths = []
+        for f in file_list:
+            p = str(pathlib.Path(f[0]).parent)
+            if p not in uniquePaths:
+                uniquePaths.append(p)
+        if len(uniquePaths) == 1:
+            return uniquePaths[0]
+        else:
+            return uniquePaths
 
     def getCopyOrLink(self):
         # Set a function to copyFile or createLink

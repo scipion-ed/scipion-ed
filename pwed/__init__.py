@@ -42,7 +42,7 @@ from .constants import *
 from .objects import EdBaseObject
 
 
-__version__ = '0.0.0'
+__version__ = '0.0.1'
 
 
 class Domain(pwplugin.Domain):

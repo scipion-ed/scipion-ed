@@ -39,7 +39,7 @@ recommend to create a development folder to download the source code.
     
 
 Running tests (TO BE UPDATED)
-.............
+.............................
 
 .. code-block:: bash
 
@@ -56,7 +56,7 @@ Running tests (TO BE UPDATED)
 
 
 Python 3 environments (TO BE UPDATED)
----------------------
+-------------------------------------
 
 For development, we probably want to download the source code and install from there. In that way
 changes can be made and we can test it quickly.
@@ -83,3 +83,4 @@ Tkinter with Python3
 
 Tkinter with Conda
 ..................
+

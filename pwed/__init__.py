@@ -31,10 +31,12 @@ This modules contains classes related with EM
 
 import os
 
+import pyworkflow as pw
+import pyworkflow.utils as pwutils
 import pyworkflow.plugin as pwplugin
 from pyworkflow.viewer import Viewer
 from pyworkflow.wizard import Wizard
-from pyworkflow.protocol import Protocol
+from pyworkflow.protocol import Protocol, HostConfig
 
 from .constants import *
 from .objects import EdBaseObject
@@ -57,9 +59,25 @@ class Plugin(pwplugin.Plugin):
 
 
 class Config:
-    SCIPION_ED = os.environ['SCIPION_ED']
-    SCIPION_ED_TESTDATA = os.environ.get('SCIPION_ED_TESTDATA',
-                                         os.path.join(SCIPION_ED, 'Testdata'))
+    SCIPION_ED_USERDATA = os.environ.get('SCIPION_ED_TESTDATA',
+                                         pwutils.expandPattern("~/ScipionEdUserData"))
+
+    SCIPION_ED_TESTDATA = os.environ.get('SCIPION_ED_TESTDATA', None)
+
+
+# ----------- Override some pyworkflow config settings ------------------------
+
+# Create default hosts.conf
+hostsFile = os.path.join(Config.SCIPION_ED_USERDATA, 'hosts.conf')
+if not os.path.exists(hostsFile):
+    HostConfig.writeBasic(hostsFile)
+
+
+os.environ['SCIPION_VERSION'] = "ED - " + __version__
+os.environ['SCIPION_USER_DATA'] = pw.Config.SCIPION_USER_DATA = Config.SCIPION_ED_USERDATA
+os.environ['SCIPION_HOSTS'] = pw.Config.SCIPION_HOSTS = hostsFile
+
+pw.Config.setDomain('pwed')
 
 
 Domain.registerPlugin(__name__)

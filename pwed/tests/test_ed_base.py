@@ -132,8 +132,7 @@ class TestEdBaseProtocols(pwtests.BaseTest):
     @classmethod
     def setUpClass(cls):
         pwtests.setupTestProject(cls, writeLocalConfig=True)
-        cls.dataPath = os.path.join(pwed.Config.SCIPION_ED_TESTDATA,
-                                    '190503')
+        cls.dataPath = pwed.Config.SCIPION_ED_TESTDATA
 
         if not os.path.exists(cls.dataPath):
             raise Exception("Can not run ED tests, missing file:\n  %s"

@@ -64,6 +64,9 @@ class Config:
 
     SCIPION_ED_TESTDATA = os.environ.get('SCIPION_ED_TESTDATA', None)
 
+    SCIPION_ED_TEST_OUTPUT = os.environ.get('SCIPION_ED_TEST_OUTPUT',
+                                            os.path.join(SCIPION_ED_USERDATA, 'Tests'))
+
 
 # ----------- Override some pyworkflow config settings ------------------------
 
@@ -79,6 +82,7 @@ if not os.path.exists(hostsFile):
 os.environ['SCIPION_VERSION'] = "ED - " + __version__
 os.environ['SCIPION_USER_DATA'] = pw.Config.SCIPION_USER_DATA = Config.SCIPION_ED_USERDATA
 os.environ['SCIPION_HOSTS'] = pw.Config.SCIPION_HOSTS = hostsFile
+os.environ['SCIPION_TESTS_OUTPUT'] = pw.Config.SCIPION_TESTS_OUTPUT = Config.SCIPION_ED_TEST_OUTPUT
 
 pw.Config.setDomain('pwed')
 

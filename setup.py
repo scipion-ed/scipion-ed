@@ -43,7 +43,7 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
 # Read requirements.txt
-with open('requirements.txt') as f:
+with open(path.join(here, 'requirements.txt')) as f:
     requirements = f.read().splitlines()
 
 
@@ -121,6 +121,8 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3 :: Only',
         'Topic :: Scientific/Engineering'
     ],
 
@@ -189,9 +191,9 @@ setup(
     # For example, the following would provide a command called `sample` which
     # executes the function `main` from this package when invoked:
     entry_points={
-          'console_scripts': [
-               'scipion-ed = pwed.__main__:main',
-          ],
+        'console_scripts': [
+            'scipion-ed = pwed.__main__:main',
+        ],
         'pyworkflow.plugin': 'pwed = pwed',
     },
 

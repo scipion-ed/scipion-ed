@@ -67,6 +67,9 @@ class Config:
 
 # ----------- Override some pyworkflow config settings ------------------------
 
+# Create Config.SCIPION_ED_USERDATA if it does not already exist.
+if not os.path.exists(Config.SCIPION_ED_USERDATA):
+    os.mkdir(Config.SCIPION_ED_USERDATA)
 # Create default hosts.conf
 hostsFile = os.path.join(Config.SCIPION_ED_USERDATA, 'hosts.conf')
 if not os.path.exists(hostsFile):
@@ -81,5 +84,3 @@ pw.Config.setDomain('pwed')
 
 
 Domain.registerPlugin(__name__)
-
-

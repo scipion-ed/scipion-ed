@@ -121,6 +121,8 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3 :: Only',
         'Topic :: Scientific/Engineering'
     ],
 
@@ -189,9 +191,9 @@ setup(
     # For example, the following would provide a command called `sample` which
     # executes the function `main` from this package when invoked:
     entry_points={
-          'console_scripts': [
-               'scipion-ed = pwed.__main__:main',
-          ],
+        'console_scripts': [
+            'scipion-ed = pwed.__main__:main',
+        ],
         'pyworkflow.plugin': 'pwed = pwed',
     },
 

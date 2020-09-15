@@ -38,6 +38,23 @@ recommend to create a development folder to download the source code.
     python -m pip install -e scipion-ed-dials  # Install in the environment as development
     
 
+Publishing the package to PyPI
+.............................
+
+In order to make scipion-ed available to install with `pip install scipion-ed`,
+we need to:
+
+.. code-block:: bash
+
+    python install twine restructuredtext-lint
+    cd scipion-ed
+
+    # It might be a good idea to check the README.rst before uploading:
+    rst-lint README.rst
+
+    python setup.py sdist
+    twine upload dist/scipion-ed-0.0.1a3.tar.gz
+
 Running tests (TO BE UPDATED)
 .............................
 

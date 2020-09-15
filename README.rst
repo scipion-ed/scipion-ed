@@ -39,7 +39,7 @@ recommend to create a development folder to download the source code.
     
 
 Publishing the package to PyPI
-.............................
+..............................
 
 In order to make scipion-ed available to install with `pip install scipion-ed`,
 we need to:
